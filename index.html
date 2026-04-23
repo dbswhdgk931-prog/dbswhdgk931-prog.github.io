@@ -1,10 +1,246 @@
 <!doctype html>
-<html>
+<html lang="ko">
   <head>
     <meta charset="utf-8" />
-    <title>My test page</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Copilot Agent 핸즈온</title>
+    <link rel="stylesheet" href="css/style.css" />
   </head>
   <body>
-    <p>test</p>
+    <div class="wrapper">
+    <aside class="sidebar">
+      <h2>Copilot Agent 핸즈온</h2>
+      <nav>
+        <a href="#overview">개요</a>
+        <a href="#prerequisites">사전 준비</a>
+        <a href="#step1">Step 1: 환경 설정</a>
+        <a href="#step2">Step 2: 에이전트 만들기</a>
+        <a href="#step3">Step 3: 토픽 구성</a>
+        <a href="#step4">Step 4: 테스트 및 배포</a>
+        <a href="#resources">참고 자료</a>
+      </nav>
+    </aside>
+
+    <main class="content">
+      <h1>Copilot Agent 핸즈온 가이드</h1>
+      <p class="subtitle">
+        Microsoft Copilot Studio를 사용하여 나만의 에이전트를 만들어봅니다.
+      </p>
+
+      <!-- 개요 -->
+      <section id="overview">
+        <h2>개요</h2>
+        <p>
+          이 핸즈온에서는 Microsoft Copilot Studio를 활용하여 커스텀 에이전트를
+          만드는 전체 과정을 다룹니다. 기본 환경 설정부터 토픽 구성, 테스트,
+          배포까지 단계별로 진행합니다.
+        </p>
+        <div class="img-box">
+          <img src="images/01-overview.svg" alt="Copilot Studio 메인 화면" />
+          <div class="img-caption">그림 1. Copilot Studio 메인 화면</div>
+        </div>
+        <div class="callout">
+          <strong>핸즈온 목표:</strong> 약 30분 내에 기본적인 Copilot Agent를
+          만들고 테스트하는 것을 목표로 합니다.
+        </div>
+      </section>
+
+      <!-- 사전 준비 -->
+      <section id="prerequisites">
+        <h2>사전 준비</h2>
+        <ul>
+          <li>Microsoft 365 계정 (회사 또는 개발자 계정)</li>
+          <li>Copilot Studio 접근 권한</li>
+          <li>웹 브라우저 (Edge 또는 Chrome 권장)</li>
+        </ul>
+        <div class="callout warning">
+          <strong>참고:</strong> 평가판 라이선스로도 진행 가능합니다.
+          <a href="https://copilotstudio.microsoft.com" target="_blank"
+            >copilotstudio.microsoft.com</a
+          >
+          에서 시작하세요.
+        </div>
+      </section>
+
+      <!-- Step 1 -->
+      <section id="step1">
+        <h2>Step 1: 환경 설정</h2>
+        <p>Copilot Studio에 접속하여 새 에이전트를 만들 환경을 준비합니다.</p>
+
+        <div class="step">
+          <span class="step-number">1</span>
+          <div class="step-content">
+            <strong>
+              <a href="https://copilotstudio.microsoft.com" target="_blank"
+                >copilotstudio.microsoft.com</a
+              >에 접속합니다.
+            </strong>
+            <p>Microsoft 계정으로 로그인하세요.</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <span class="step-number">2</span>
+          <div class="step-content">
+            <strong>환경을 선택합니다.</strong>
+            <p>
+              좌측 상단에서 작업할 환경(Environment)을 선택합니다. 개발용 환경을
+              사용하는 것을 권장합니다.
+            </p>
+          </div>
+        </div>
+
+        <div class="img-box">
+          <img src="images/02-environment.svg" alt="환경 선택 화면" />
+          <div class="img-caption">그림 2. 환경 선택 화면</div>
+        </div>
+      </section>
+
+      <!-- Step 2 -->
+      <section id="step2">
+        <h2>Step 2: 에이전트 만들기</h2>
+        <p>새로운 에이전트를 생성하고 기본 설정을 구성합니다.</p>
+
+        <div class="step">
+          <span class="step-number">1</span>
+          <div class="step-content">
+            <strong>좌측 메뉴에서 "만들기(Create)"를 클릭합니다.</strong>
+          </div>
+        </div>
+
+        <div class="step">
+          <span class="step-number">2</span>
+          <div class="step-content">
+            <strong>"새 에이전트(New agent)"를 선택합니다.</strong>
+            <p>
+              자연어로 에이전트의 목적을 설명하거나, 빈 에이전트로 시작할 수
+              있습니다.
+            </p>
+          </div>
+        </div>
+
+        <div class="step">
+          <span class="step-number">3</span>
+          <div class="step-content">
+            <strong>에이전트 기본 정보를 입력합니다.</strong>
+          </div>
+        </div>
+
+        <pre><code>이름: IT 헬프데스크 봇
+설명: 사내 IT 관련 질문에 답변하는 에이전트
+지침: 당신은 친절한 IT 지원 담당자입니다.
+      사용자의 IT 관련 질문에 정확하고 간결하게 답변하세요.</code></pre>
+
+        <div class="img-box">
+          <img src="images/03-create-agent.svg" alt="에이전트 만들기 화면" />
+          <div class="img-caption">그림 3. 새 에이전트 만들기</div>
+        </div>
+      </section>
+
+      <!-- Step 3 -->
+      <section id="step3">
+        <h2>Step 3: 토픽 구성</h2>
+        <p>
+          에이전트가 응답할 토픽(주제)을 만들어봅니다. 토픽은 사용자의 특정
+          의도에 대한 대화 흐름입니다.
+        </p>
+
+        <h3>토픽 추가하기</h3>
+
+        <div class="step">
+          <span class="step-number">1</span>
+          <div class="step-content">
+            <strong>상단 메뉴에서 "토픽(Topics)"을 클릭합니다.</strong>
+          </div>
+        </div>
+
+        <div class="step">
+          <span class="step-number">2</span>
+          <div class="step-content">
+            <strong
+              >"+ 새 토픽 > 빈 토픽에서(From blank)"을 선택합니다.</strong
+            >
+          </div>
+        </div>
+
+        <div class="step">
+          <span class="step-number">3</span>
+          <div class="step-content">
+            <strong>트리거 문구를 추가합니다.</strong>
+            <p>사용자가 입력할 수 있는 다양한 문구를 등록합니다.</p>
+          </div>
+        </div>
+
+        <pre><code>트리거 문구 예시:
+- "비밀번호 초기화"
+- "비밀번호를 바꾸고 싶어요"
+- "패스워드 리셋"
+- "비번 변경 방법"</code></pre>
+
+        <div class="img-box">
+          <img src="images/04-topic.svg" alt="토픽 구성 화면" />
+          <div class="img-caption">그림 4. 토픽 구성 화면</div>
+        </div>
+      </section>
+
+      <!-- Step 4 -->
+      <section id="step4">
+        <h2>Step 4: 테스트 및 배포</h2>
+        <p>만들어진 에이전트를 테스트하고 채널에 배포합니다.</p>
+
+        <h3>테스트</h3>
+        <p>
+          화면 좌측 하단의 <strong>"에이전트 테스트(Test your agent)"</strong>
+          패널에서 바로 테스트할 수 있습니다.
+        </p>
+
+        <pre><code>테스트 대화 예시:
+
+사용자: 비밀번호 초기화하고 싶어요
+에이전트: 비밀번호 초기화를 도와드리겠습니다.
+         사번을 입력해 주세요.
+사용자: 12345
+에이전트: 12345번 사원님, 임시 비밀번호를 이메일로
+         발송했습니다. 확인해 주세요.</code></pre>
+
+        <h3>배포</h3>
+        <p>테스트가 완료되면 다양한 채널에 배포할 수 있습니다.</p>
+        <ul>
+          <li>Microsoft Teams</li>
+          <li>웹사이트 (임베디드)</li>
+          <li>Power Apps</li>
+          <li>기타 채널 (Slack, Facebook 등)</li>
+        </ul>
+
+        <div class="img-box">
+          <img src="images/05-deploy.svg" alt="배포 채널 선택" />
+          <div class="img-caption">그림 5. 배포 채널 선택 화면</div>
+        </div>
+      </section>
+
+      <!-- 참고 자료 -->
+      <section id="resources">
+        <h2>참고 자료</h2>
+        <ul>
+          <li>
+            <a
+              href="https://learn.microsoft.com/ko-kr/microsoft-copilot-studio/"
+              target="_blank"
+              >Microsoft Copilot Studio 공식 문서</a
+            >
+          </li>
+          <li>
+            <a
+              href="https://learn.microsoft.com/ko-kr/training/paths/work-power-virtual-agents/"
+              target="_blank"
+              >Microsoft Learn - Copilot Studio 학습 경로</a
+            >
+          </li>
+        </ul>
+      </section>
+    </main>
+    </div>
+
+    <script src="js/main.js"></script>
   </body>
 </html>
