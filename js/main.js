@@ -29,4 +29,45 @@ document.addEventListener("DOMContentLoaded", function () {
       document.getElementById(id).scrollIntoView({ behavior: "smooth" });
     });
   });
+
+  // Image lightbox
+  var lightbox = document.getElementById("lightbox");
+  var lightboxImg = document.getElementById("lightbox-img");
+
+  document.querySelectorAll(".img-box img").forEach(function (img) {
+    img.addEventListener("click", function () {
+      lightboxImg.src = img.src;
+      lightboxImg.alt = img.alt;
+      lightbox.classList.add("active");
+    });
+  });
+
+  lightbox.addEventListener("click", function () {
+    lightbox.classList.remove("active");
+  });
+
+  // SVG lightbox
+  var svgLightbox = document.getElementById("svg-lightbox");
+  var svgLightboxContent = document.getElementById("svg-lightbox-content");
+
+  document.querySelectorAll(".svg-box").forEach(function (box) {
+    box.addEventListener("click", function () {
+      var svg = box.querySelector("svg");
+      if (svg) {
+        svgLightboxContent.innerHTML = svg.outerHTML;
+        svgLightbox.classList.add("active");
+      }
+    });
+  });
+
+  svgLightbox.addEventListener("click", function () {
+    svgLightbox.classList.remove("active");
+  });
+
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape") {
+      lightbox.classList.remove("active");
+      svgLightbox.classList.remove("active");
+    }
+  });
 });
