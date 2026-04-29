@@ -3,7 +3,11 @@
     "allow": [
       "WebFetch(domain:docs.langchain.com)",
       "Bash(python3:*)",
-      "Bash(python:*)"
+      "Bash(python:*)",
+      "WebFetch(domain:mockhrserver.onrender.com)",
+      "Bash(curl:*)",
+      "Bash(mkdir:*)",
+      "Bash(cp:*)"
     ]
   }
 }

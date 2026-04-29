@@ -24,9 +24,14 @@
         <a href="#step7">Step 7: Word 템플릿</a>
         <a href="#step8">Step 8: 에이전트 흐름</a>
         <a href="#step8-1" class="nav-sub">① JSON 구문 분석 · 분석결과 분리</a>
-        <a href="#step8-2" class="nav-sub">② Word 문서 생성</a>
-        <a href="#step8-3" class="nav-sub">③ OneDrive 저장</a>
-        <a href="#step8-4" class="nav-sub">④ 공유 링크 · 에이전트 반환</a>
+        <a href="#step8-2" class="nav-sub">② 데이터 전처리</a>
+        <a href="#step8-2-1" class="nav-sub">&nbsp;&nbsp;②-1 학력</a>
+        <a href="#step8-2-2" class="nav-sub">&nbsp;&nbsp;②-2 주요경력</a>
+        <a href="#step8-2-3" class="nav-sub">&nbsp;&nbsp;②-3 업적·역량·코멘트</a>
+        <a href="#step8-2-4" class="nav-sub">&nbsp;&nbsp;②-4 동료·부하 리더십</a>
+        <a href="#step8-3" class="nav-sub">③ Word 문서 생성</a>
+        <a href="#step8-4" class="nav-sub">④ OneDrive 저장</a>
+        <a href="#step8-5" class="nav-sub">⑤ 공유 링크 · 에이전트 반환</a>
         <a href="#step9">Step 9: 최종 테스트</a>
         <a href="#reference">참고</a>
       </nav>
@@ -34,6 +39,11 @@
 
     <main class="content">
       <h1>HR Data 원큐 Agent 핸즈온 가이드</h1>
+
+      <div class="callout" style="background:#f5f3ff;border-left-color:#8b5cf6;">
+        <strong>Copilot Studio Only 버전:</strong> Power Automate 없이 Copilot Studio만으로 구현하는 간소화 가이드(8단계)는
+        <a href="handson/index.html"><strong>여기</strong></a>에서 확인하세요.
+      </div>
 
       <!-- 개요 -->
       <section id="overview">
@@ -178,9 +188,9 @@
         <h3>Mock API</h3>
         <ul>
           <li>Base URL: <code>https://mockhrserver.onrender.com</code></li>
-          <li>인사정보 조회: <code>GET /api/v2/inhr/employees/{id}</code></li>
-          <li>평가/리더십 조회: <code>GET /api/v2/myhr/evaluations/{id}</code></li>
-          <li>Swagger 문서: <a href="https://mockhrserver.onrender.com/swagger/v2.json" target="_blank">https://mockhrserver.onrender.com/swagger/v2.json</a></li>
+          <li>인사정보 조회: <code>GET /api/v1/inhr/employees/{id}</code></li>
+          <li>평가/리더십 조회: <code>GET /api/v1/myhr/evaluations/{id}</code></li>
+          <li>Swagger 문서: <a href="https://mockhrserver.onrender.com/docs" target="_blank">https://mockhrserver.onrender.com/docs</a></li>
           <li>직원 100명, 23개 부서</li>
         </ul>
 
@@ -224,13 +234,13 @@
         <div class="step">
           <span class="step-number">3</span>
           <div class="step-content">
-            <strong>아래 정보 입력하고 저장합니다. (지침은 뒤에서 작성합니다)</strong>
+            <strong>아래 정보 입력하고 각각 저장합니다.</strong>
             <table>
               <thead><tr><th>항목</th><th>입력 값</th></tr></thead>
               <tbody>
                 <tr><td>이름</td><td><code>HR 에이전트</code></td></tr>
                 <tr><td>설명</td><td><code>HR Data 기반 구성원 역량 프로필을 생성하고 분석하는 에이전트입니다.</code></td></tr>
-                <tr><td>지침</td><td>(비워두기 — Step 3에서 토픽 구성 후 작성)</td></tr>
+                <tr><td>지침</td><td><code>당신은 SK케미칼 HR Data 원큐 Agent입니다. ## 역할 HR 담당자가 구성원의 사번을 입력하면, HR 시스템 API에서 인사정보와 평가정보를 조회하고, 참조자료(포지션별 요구역량, 역량항목 채점기준)를 기반으로 역량 분석 프로필을 생성합니다. ## 응답 원칙 - API로 조회한 실제 데이터만 사용합니다. 데이터를 임의로 생성하지 않습니다. - 참조자료에서 해당 포지션의 요구역량과 채점기준을 확인한 후 분석합니다. - 실제 평가등급, 점수, 코멘트를 반드시 직접 인용하여 서술합니다. - 채점 기준을 그대로 나열하지 말고, 기준에 따른 분석 결과만 서술합니다. - HR 데이터는 민감 정보이므로 요청한 내용에 대해서만 답변합니다.</code></td></tr>
               </tbody>
             </table>
           </div>
@@ -329,9 +339,18 @@
         <div class="step">
           <span class="step-number">3</span>
           <div class="step-content">
-            <strong>맨 위 트리거 노드의 "토픽이 수행하는 작업 설명"은 비워둡니다.</strong>
-            <p>에이전트 지침(Step 3)에서 토픽 연결을 정의했으므로, 트리거 설명 없이도 자동으로 라우팅됩니다.</p>
+            <strong>맨 위 트리거 노드 클릭 → "토픽이 수행하는 작업 설명" 입력:</strong>
+            <pre><code>사번을 입력받아 HR 데이터를 조회하고, 역량모델 기준에 따라 구성원 프로필을 분석합니다.</code></pre>
           </div>
+        </div>
+
+        <div class="img-box">
+          <img src="images/step6-trigger.png" alt="트리거 노드 설정" />
+          <div class="img-caption">트리거 노드 — 자연어 설명 입력 화면</div>
+        </div>
+
+        <div class="callout">
+          <strong>팁:</strong> 이전 버전에는 "트리거 문구 추가" 버튼이 따로 있었지만, 현재는 자연어 설명 방식. AI가 "프로필 만들어줘", "역량 분석해줘" 등에 자동 매칭.
         </div>
         </div>
 
@@ -374,9 +393,10 @@
         </div>
 
         <div class="step-group">
-        <h3>시스템 토픽 — 대화 시작 메시지</h3>
+        <h3>시스템 토픽 연결 (대화 시작)</h3>
         <p><strong>"대화 시작"</strong>은 Copilot Studio의 시스템 토픽으로, 사용자가 에이전트와 처음 대화를 시작할 때 자동으로 실행됩니다.
-          이 토픽에 인사 메시지를 추가하면 에이전트가 자기소개와 함께 사용 안내를 먼저 전달할 수 있습니다.</p>
+          이 토픽에 인사 메시지를 추가하면 에이전트가 자기소개와 함께 사용 안내를 먼저 전달할 수 있고,
+          이어서 프로필 생성 토픽으로 자동 연결하면 매끄러운 대화 흐름을 만들 수 있습니다.</p>
 
         <div class="step">
           <span class="step-number">8</span>
@@ -388,36 +408,30 @@
         <div class="step">
           <span class="step-number">9</span>
           <div class="step-content">
-            <strong>기존 메시지 노드의 텍스트를 아래 인사말로 교체 후 "저장"</strong>
+            <strong>기존 메시지 노드의 텍스트를 아래 인사말로 교체</strong>
             <p>에이전트가 처음 대화 시작 시 사용자에게 보여줄 안내 메시지입니다.</p>
 <pre><code>안녕하세요, HR 원큐 에이전트입니다.
 구성원의 사번을 입력하시면 인사·평가 데이터를 조회하고,
 역량모델 기준에 따라 분석한 뒤 프로필 문서(word)를 생성해 드립니다.</code></pre>
           </div>
         </div>
-        </div>
-
-        <div class="step-group">
-        <h3>에이전트 지침 설정 (토픽 연결)</h3>
-        <p>에이전트의 <strong>지침(Instructions)</strong>에 역할과 범위를 정의하면, 사용자가 프로필 생성을 요청할 때 자동으로 "프로필 생성" 토픽으로 연결됩니다.</p>
 
         <div class="step">
           <span class="step-number">10</span>
           <div class="step-content">
-            <strong>좌측 메뉴 "에이전트" → "개요" → "지침" 영역에 아래 내용 입력 후 "저장"</strong>
-<pre><code>당신은 SK케미칼 HR Data 원큐 Agent입니다.
-
-### 답변 가능
-- 구성원의 프로필 생성 요청은 /프로필 생성 토픽으로 연결합니다.
-
-### 답변 불가
-- 답변 가능 항목 외 모든 문의는 "해당 문의에는 답변할 수 없습니다." 로 답변합니다.</code></pre>
+            <strong>메시지 노드 아래 "+" → "토픽 관리" → "다른 토픽으로 이동" → "프로필 생성" 선택</strong>
           </div>
         </div>
 
-        <div class="callout">
-          <strong>토픽 연결 방법:</strong> 지침에서 <code>/토픽이름</code> 형식으로 작성하면 에이전트가 해당 토픽으로 자동 라우팅합니다.
-          <code>/프로필 생성</code>이라고 명시하면, 사번 입력 시 별도 토픽 이동 설정 없이 "프로필 생성" 토픽이 자동 실행됩니다.
+        <div class="step">
+          <span class="step-number">11</span>
+          <div class="step-content">
+            <strong>"저장"</strong>
+          </div>
+        </div>
+
+        <div class="img-box">
+          <img src="images/step6-conversation-start.png" alt="대화 시작 토픽 연결 화면" />
         </div>
         </div>
       </section>
@@ -448,9 +462,9 @@
             <table>
               <thead><tr><th>항목</th><th>값</th></tr></thead>
               <tbody>
-                <tr><td>URL</td><td><code>...</code> 클릭 → <strong>"수식"</strong> → <code>"https://mockhrserver.onrender.com/api/v2/inhr/employees/" &amp; Topic.사번</code></td></tr>
+                <tr><td>URL</td><td><code>...</code> 클릭 → <strong>"수식"</strong> → <code>"https://mockhrserver.onrender.com/api/v1/inhr/employees/" &amp; Topic.사번</code></td></tr>
                 <tr><td>메서드</td><td><code>GET</code></td></tr>
-
+                <tr><td>콘텐츠 형식</td><td><code>application/json</code></td></tr>
                 <tr><td>응답 데이터 형식</td><td><strong>"샘플 데이터에서 선택"</strong> → <strong>"&lt;/&gt; 샘플 JSON에서 스키마 가져오기"</strong> 클릭 → 아래 JSON 붙여넣기</td></tr>
               </tbody>
             </table>
@@ -470,11 +484,26 @@
     "photoUrl": "https://sp.example.com/photos/emp000.jpg",
     "managerId": "EMP001",
     "lastModified": "2026-04-01T09:00:00Z",
-    "educationSummary": "서울대학교 경영학 학사 (2008년 졸업) / 연세대학교 MBA 석사 (2012년 졸업)",
-    "careerSummary": "삼성전자 기획팀 사원 (2008-03-01~2013-02-28) - 신사업 기획 업무 / SK케미칼 전략기획팀 부장 (2013-03-01~재직중) - 중장기 전략 수립",
-    "overseasSummary": "미국 MBA 파견 (2010-08-01~2012-06-30) / 독일 기술 연수 (2018-06-01~2018-08-31)",
-    "familySummary": "",
-    "certificationSummary": ""
+    "educations": [
+      {"school": "서울대학교", "degree": "학사", "major": "경영학", "gradYear": 2008},
+      {"school": "연세대학교", "degree": "석사", "major": "MBA", "gradYear": 2012}
+    ],
+    "careers": [
+      {"company": "삼성전자", "department": "기획팀", "role": "사원", "startDate": "2008-03-01", "endDate": "2013-02-28", "region": "수원", "description": "신사업 기획 업무", "isCurrent": false},
+      {"company": "SK케미칼", "department": "전략기획팀", "role": "부장", "startDate": "2013-03-01", "endDate": "2099-12-31", "region": "성남", "description": "중장기 전략 수립", "isCurrent": true}
+    ],
+    "overseasExperiences": [
+      {"country": "미국", "purpose": "MBA 파견", "startDate": "2010-08-01", "endDate": "2012-06-30"},
+      {"country": "독일", "purpose": "기술 연수", "startDate": "2018-06-01", "endDate": "2018-08-31"}
+    ],
+    "family": [
+      {"relation": "배우자", "name": "김영희", "birthYear": 1986, "education": "고려대학교 영문학 학사", "occupation": "회사원"},
+      {"relation": "자녀", "name": "홍서연", "birthYear": 2015, "education": "초등학교 재학", "occupation": "학생"}
+    ],
+    "certifications": [
+      {"certName": "TOEIC", "issuer": "ETS", "country": "미국", "scoreOrGrade": "950", "issuedDate": "2020-05-15", "expiryDate": "2022-05-14"},
+      {"certName": "PMP", "issuer": "PMI", "country": "미국", "scoreOrGrade": "Pass", "issuedDate": "2019-11-20", "expiryDate": "2025-11-19"}
+    ]
   }
 }</code></pre>
             </details>
@@ -510,9 +539,9 @@
             <table>
               <thead><tr><th>항목</th><th>값</th></tr></thead>
               <tbody>
-                <tr><td>URL</td><td><code>...</code> 클릭 → <strong>"수식"</strong> → <code>"https://mockhrserver.onrender.com/api/v2/myhr/evaluations/" &amp; Topic.사번</code></td></tr>
+                <tr><td>URL</td><td><code>...</code> 클릭 → <strong>"수식"</strong> → <code>"https://mockhrserver.onrender.com/api/v1/myhr/evaluations/" &amp; Topic.사번</code></td></tr>
                 <tr><td>메서드</td><td><code>GET</code></td></tr>
-
+                <tr><td>콘텐츠 형식</td><td><code>application/json</code></td></tr>
                 <tr><td>응답 데이터 형식</td><td><strong>"샘플 데이터에서 선택"</strong> → <strong>"&lt;/&gt; 샘플 JSON에서 스키마 가져오기"</strong> 클릭 → 아래 JSON 붙여넣기</td></tr>
               </tbody>
             </table>
@@ -523,34 +552,53 @@
   "data": {
     "employeeId": "EMP000",
     "lastModified": "2026-04-01T09:00:00Z",
-    "referenceYears": {"N": 2025, "N1": 2024, "N2": 2023},
-    "performance_N": "S",
-    "competency_N": "S",
-    "supervisorReview_N": "글로벌 진출 전략 성공. (직속상사)",
-    "supervisorScore_N": "4.7",
-    "peerScore_N": "4.4",
-    "subordinateScore_N": "4.0",
-    "supervisorComment_N": "",
-    "peerComment_N": "고객 관점 사고 / 업무 위임 부족",
-    "subordinateComment_N": "체계적 피드백 / 타 부서 소통 적극화",
-    "performance_N1": "S",
-    "competency_N1": "A",
-    "supervisorReview_N1": "신사업 발굴 탁월. (직속상사)",
-    "supervisorScore_N1": "4.8",
-    "peerScore_N1": "4.5",
-    "subordinateScore_N1": "4.4",
-    "supervisorComment_N1": "",
-    "peerComment_N1": "이슈 구조화 능력 / 사전 공유 강화",
-    "subordinateComment_N1": "체계적 성과 관리 / 워라밸 신경",
-    "performance_N2": "A",
-    "competency_N2": "A",
-    "supervisorReview_N2": "주요 프로젝트를 성공적으로 리드함. (직속상사)",
-    "supervisorScore_N2": "4.5",
-    "peerScore_N2": "4.3",
-    "subordinateScore_N2": "4.6",
-    "supervisorComment_N2": "",
-    "peerComment_N2": "협업 우수 / 조율 시간 필요",
-    "subordinateComment_N2": "코칭 적극적 / 권한 명확화 필요"
+    "evaluations": [
+      {
+        "year": 2023,
+        "performanceGrade": "A",
+        "competencyGrade": "A",
+        "comment": {
+          "type": "상사평",
+          "text": "주요 프로젝트를 성공적으로 리드함.",
+          "commenter": "직속상사"
+        },
+        "leadershipSurveys": [
+          {"evaluatorType": "상사", "score": 4.5, "strengthComment": "전략적 사고 우수", "developmentComment": "세부 점검 필요"},
+          {"evaluatorType": "동료", "score": 4.3, "strengthComment": "협업 우수", "developmentComment": "조율 시간 필요"},
+          {"evaluatorType": "부하", "score": 4.6, "strengthComment": "코칭 적극적", "developmentComment": "권한 명확화 필요"}
+        ]
+      },
+      {
+        "year": 2024,
+        "performanceGrade": "S",
+        "competencyGrade": "A",
+        "comment": {
+          "type": "상사평",
+          "text": "신사업 발굴 탁월.",
+          "commenter": "직속상사"
+        },
+        "leadershipSurveys": [
+          {"evaluatorType": "상사", "score": 4.8, "strengthComment": "실행력 탁월", "developmentComment": "성과 압박 균형 필요"},
+          {"evaluatorType": "동료", "score": 4.5, "strengthComment": "이슈 구조화 능력", "developmentComment": "사전 공유 강화"},
+          {"evaluatorType": "부하", "score": 4.4, "strengthComment": "체계적 성과 관리", "developmentComment": "워라밸 신경"}
+        ]
+      },
+      {
+        "year": 2025,
+        "performanceGrade": "S",
+        "competencyGrade": "S",
+        "comment": {
+          "type": "상사평",
+          "text": "글로벌 진출 전략 성공.",
+          "commenter": "직속상사"
+        },
+        "leadershipSurveys": [
+          {"evaluatorType": "상사", "score": 4.7, "strengthComment": "변화 관리 추진력", "developmentComment": "타인 의견 수용 개선"},
+          {"evaluatorType": "동료", "score": 4.4, "strengthComment": "고객 관점 사고", "developmentComment": "업무 위임 부족"},
+          {"evaluatorType": "부하", "score": 4.0, "strengthComment": "체계적 피드백", "developmentComment": "타 부서 소통 적극화"}
+        ]
+      }
+    ]
   }
 }</code></pre>
             </details>
@@ -592,25 +640,25 @@
           </div>
         </div>
 
+        <div class="img-box">
+          <img src="images/step4-variable-set-hr.png" alt="인사정보 변수 값 설정 화면" />
+        </div>
+
         <div class="step">
           <span class="step-number">10</span>
           <div class="step-content">
-            <strong>같은 변수 값 설정 노드 하단의 "+ 새 할당" 클릭하여 평가정보도 추가:</strong>
+            <strong>평가정보에 대해서도 동일한 작업을 진행합니다.<br>
+            ⑨ 변수 값 설정 아래 "+" → "변수 관리" → "변수 값 설정" 추가:</strong>
             <ul>
               <li>"변수 설정" → "새 변수 만들기" → 변수명: <code>평가정보_문자열</code> (문자열 타입)</li>
-              <li>"받는 사람 값" → 수식: <code>JSON(Topic.평가정보_record, JSONFormat.IndentFour)</code></li>
+              <li>수식: <code>JSON(Topic.평가정보_record, JSONFormat.IndentFour)</code></li>
             </ul>
           </div>
-        </div>
-
-        <div class="img-box">
-          <img src="images/step4-variable-set-hr.png" alt="변수 값 설정 화면" />
         </div>
 
         <div class="callout">
           <strong>JSONFormat.IndentFour</strong>는 들여쓰기 4칸으로 보기 좋게 포맷합니다. AI가 JSON 구조를 더 잘 인식할 수 있어 분석 정확도가 올라갑니다.
         </div>
-
         </div>
 
         <div class="step-group">
@@ -619,44 +667,33 @@
         <div class="step">
           <span class="step-number">1</span>
           <div class="step-content">
-            <strong>변수 값 설정 노드 아래 "+" → "메시지 보내기" 추가</strong>
-            <p>메시지 입력란에서 <strong>"{x}" (변수 삽입)</strong> 버튼을 클릭하여 <code>인사정보_문자열</code>, <code>평가정보_문자열</code> 두 변수를 삽입합니다.</p>
-            <div class="callout">
-              이 메시지 노드는 API 데이터가 정상적으로 조회되는지 확인하기 위한 <strong>임시 테스트용</strong>입니다. 확인 후 삭제합니다.
-            </div>
+            <strong>오른쪽 상단 "저장"</strong>
           </div>
         </div>
 
         <div class="step">
           <span class="step-number">2</span>
           <div class="step-content">
-            <strong>오른쪽 상단 "저장"</strong>
+            <strong>좌측 하단 "테스트" 버튼 클릭</strong>
           </div>
         </div>
 
         <div class="step">
           <span class="step-number">3</span>
           <div class="step-content">
-            <strong>좌측 하단 "테스트" 버튼 클릭</strong>
+            <strong><code>프로필 생성해줘</code> 입력</strong>
           </div>
         </div>
 
         <div class="step">
           <span class="step-number">4</span>
           <div class="step-content">
-            <strong><code>프로필 생성해줘</code> 입력 → 사번 <code>EMP070</code> 입력</strong>
+            <strong>사번 <code>EMP070</code> 입력</strong>
           </div>
         </div>
 
         <div class="test-result">
-          ✅ 인사정보·평가정보 JSON이 메시지로 표시되면 성공
-        </div>
-
-        <div class="step">
-          <span class="step-number">5</span>
-          <div class="step-content">
-            <strong>확인 후 테스트용 "메시지 보내기" 노드를 삭제하고 "저장"</strong>
-          </div>
+          ✅ API가 호출되어 직원 데이터가 표시되면 성공
         </div>
         </div>
 
@@ -675,7 +712,7 @@
         <div class="step">
           <span class="step-number">1</span>
           <div class="step-content">
-            <strong>변수 값 설정 노드 아래 "+" → "고급" → "생성형 답변"</strong>
+            <strong>두 번째 변수 값 설정(평가정보_문자열) 노드 아래 "+" → "고급 > 생성형 답변 만들기"</strong>
           </div>
         </div>
         </div>
@@ -932,15 +969,14 @@
           <span class="step-number">7</span>
           <div class="step-content">
             <strong>"+" → "메시지 보내기":</strong>
-            <pre><code>분석이 승인되었습니다. 결과 프로필이 확정되었습니다.
-분석 결과를 기반으로 프로필 문서를 생성합니다.</code></pre>
+            <pre><code>분석이 승인되었습니다. 결과 프로필이 확정되었습니다.</code></pre>
           </div>
         </div>
 
         <div class="step">
           <span class="step-number">8</span>
           <div class="step-content">
-            <strong>메시지 아래 "+" → "토픽 관리" → "현재 토픽 종료"</strong>
+            <strong>메시지 아래 "+" → "토픽 관리" → "모든 토픽 종료"</strong>
           </div>
         </div>
 
@@ -957,7 +993,7 @@
         <div class="step">
           <span class="step-number">10</span>
           <div class="step-content">
-            <strong>메시지 아래 "+" → "토픽 관리" → "현재 토픽 종료"</strong>
+            <strong>메시지 아래 "+" → "토픽 관리" → "모든 토픽 종료"</strong>
           </div>
         </div>
         </div>
@@ -1219,20 +1255,107 @@
                 "lastModified": {
                     "type": "string"
                 },
-                "educationSummary": {
-                    "type": "string"
+                "educations": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "school": {
+                                "type": "string"
+                            },
+                            "degree": {
+                                "type": "string"
+                            },
+                            "major": {
+                                "type": "string"
+                            },
+                            "gradYear": {
+                                "type": "integer"
+                            }
+                        }
+                    }
                 },
-                "careerSummary": {
-                    "type": "string"
+                "careers": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "company": {
+                                "type": "string"
+                            },
+                            "department": {
+                                "type": "string"
+                            },
+                            "role": {
+                                "type": "string"
+                            },
+                            "startDate": {
+                                "type": "string"
+                            },
+                            "endDate": {},
+                            "region": {
+                                "type": "string"
+                            },
+                            "description": {
+                                "type": "string"
+                            },
+                            "isCurrent": {
+                                "type": "boolean"
+                            }
+                        }
+                    }
                 },
-                "overseasSummary": {
-                    "type": "string"
+                "overseasExperiences": {
+                    "type": "array"
                 },
-                "familySummary": {
-                    "type": "string"
+                "family": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "relation": {
+                                "type": "string"
+                            },
+                            "name": {
+                                "type": "string"
+                            },
+                            "birthYear": {
+                                "type": "integer"
+                            },
+                            "education": {
+                                "type": "string"
+                            },
+                            "occupation": {
+                                "type": "string"
+                            }
+                        }
+                    }
                 },
-                "certificationSummary": {
-                    "type": "string"
+                "certifications": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "certName": {
+                                "type": "string"
+                            },
+                            "issuer": {
+                                "type": "string"
+                            },
+                            "country": {
+                                "type": "string"
+                            },
+                            "scoreOrGrade": {
+                                "type": "string"
+                            },
+                            "issuedDate": {
+                                "type": "string"
+                            },
+                            "expiryDate": {
+                                "type": "string"
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -1265,41 +1388,57 @@
                 "lastModified": {
                     "type": "string"
                 },
-                "referenceYears": {
-                    "type": "object",
-                    "properties": {
-                        "N": { "type": "integer" },
-                        "N1": { "type": "integer" },
-                        "N2": { "type": "integer" }
+                "evaluations": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "year": {
+                                "type": "integer"
+                            },
+                            "performanceGrade": {
+                                "type": "string"
+                            },
+                            "competencyGrade": {
+                                "type": "string"
+                            },
+                            "comment": {
+                                "type": "object",
+                                "properties": {
+                                    "type": {
+                                        "type": "string"
+                                    },
+                                    "text": {
+                                        "type": "string"
+                                    },
+                                    "commenter": {
+                                        "type": "string"
+                                    }
+                                }
+                            },
+                            "leadershipSurveys": {
+                                "type": "array",
+                                "items": {
+                                    "type": "object",
+                                    "properties": {
+                                        "evaluatorType": {
+                                            "type": "string"
+                                        },
+                                        "score": {
+                                            "type": "number"
+                                        },
+                                        "strengthComment": {
+                                            "type": "string"
+                                        },
+                                        "developmentComment": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
-                },
-                "performance_N": { "type": "string" },
-                "competency_N": { "type": "string" },
-                "supervisorReview_N": { "type": "string" },
-                "supervisorScore_N": { "type": "string" },
-                "peerScore_N": { "type": "string" },
-                "subordinateScore_N": { "type": "string" },
-                "supervisorComment_N": { "type": "string" },
-                "peerComment_N": { "type": "string" },
-                "subordinateComment_N": { "type": "string" },
-                "performance_N1": { "type": "string" },
-                "competency_N1": { "type": "string" },
-                "supervisorReview_N1": { "type": "string" },
-                "supervisorScore_N1": { "type": "string" },
-                "peerScore_N1": { "type": "string" },
-                "subordinateScore_N1": { "type": "string" },
-                "supervisorComment_N1": { "type": "string" },
-                "peerComment_N1": { "type": "string" },
-                "subordinateComment_N1": { "type": "string" },
-                "performance_N2": { "type": "string" },
-                "competency_N2": { "type": "string" },
-                "supervisorReview_N2": { "type": "string" },
-                "supervisorScore_N2": { "type": "string" },
-                "peerScore_N2": { "type": "string" },
-                "subordinateScore_N2": { "type": "string" },
-                "supervisorComment_N2": { "type": "string" },
-                "peerComment_N2": { "type": "string" },
-                "subordinateComment_N2": { "type": "string" }
+                }
             }
         }
     }
@@ -1370,29 +1509,256 @@
         </div>
 
         <div class="step-group">
-        <h3 id="step8-2">② Word 문서 생성</h3>
-        <p>Word 템플릿에 25개 필드를 매핑하여 문서를 생성합니다. v2 API는 데이터가 이미 전처리되어 있으므로 JSON 구문 분석 결과를 바로 매핑할 수 있습니다.</p>
+        <h3 id="step8-2">② Word 템플릿 데이터 전처리</h3>
 
-        <div class="callout" style="background:#f0fdf4;border-left-color:#22c55e;">
-          <strong>v2 API 장점:</strong> 학력·경력은 <code>educationSummary</code>, <code>careerSummary</code> 등 문자열로 제공되고, 평가 데이터는 <code>performance_N</code>, <code>peerScore_N2</code> 등 연도별 접미사(_N, _N1, _N2)로 플랫하게 제공되므로 별도 전처리(SELECT→JOIN, 배열 필터링)가 필요 없습니다.
+        <p>25개 필드 중 직접 매핑 가능한 필드와 전처리가 필요한 필드를 구분합니다.</p>
+
+        <h4>직접 매핑 가능 (6개)</h4>
+        <p>데이터 선택 또는 수식으로 바로 넣을 수 있는 필드입니다.</p>
+        <table>
+          <thead><tr><th>#</th><th>필드</th><th>매핑 방법</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td><code>성명_생년월</code></td><td>수식: JSON 구문 분석 → <code>name</code> + <code>birthDate</code> 조합</td></tr>
+            <tr><td>2</td><td><code>소속</code></td><td>데이터 선택: JSON 구문 분석 → <code>department</code></td></tr>
+            <tr><td>3</td><td><code>직책_연차</code></td><td>수식: JSON 구문 분석 → <code>position</code> + <code>tenure</code> 조합</td></tr>
+            <tr><td>23</td><td><code>주요역량_직무전문성</code></td><td>데이터 선택: 변수 → <code>주요역량</code></td></tr>
+            <tr><td>24</td><td><code>상위역할_준비도</code></td><td>데이터 선택: 변수 → <code>상위역할</code></td></tr>
+            <tr><td>25</td><td><code>종합의견</code></td><td>데이터 선택: 변수 → <code>종합의견</code></td></tr>
+          </tbody>
+        </table>
+
+        <h4>전처리 필요 (19개)</h4>
+        <p>Word 매핑 전에 별도 변수 초기화로 값을 준비해야 하는 필드입니다.</p>
+        <table>
+          <thead><tr><th>#</th><th>필드</th><th>비고</th></tr></thead>
+          <tbody>
+            <tr><td>4</td><td><code>학력</code></td><td>전처리 필요</td></tr>
+            <tr><td>5</td><td><code>주요경력</code></td><td>전처리 필요</td></tr>
+            <tr><td>6</td><td><code>업적23</code></td><td>전처리 필요</td></tr>
+            <tr><td>7</td><td><code>업적24</code></td><td>전처리 필요</td></tr>
+            <tr><td>8</td><td><code>업적25</code></td><td>전처리 필요</td></tr>
+            <tr><td>9</td><td><code>역량23</code></td><td>전처리 필요</td></tr>
+            <tr><td>10</td><td><code>역량24</code></td><td>전처리 필요</td></tr>
+            <tr><td>11</td><td><code>역량25</code></td><td>전처리 필요</td></tr>
+            <tr><td>12</td><td><code>코멘트23</code></td><td>전처리 필요</td></tr>
+            <tr><td>13</td><td><code>코멘트24</code></td><td>전처리 필요</td></tr>
+            <tr><td>14</td><td><code>코멘트25</code></td><td>전처리 필요</td></tr>
+            <tr><td>15</td><td><code>동료23</code></td><td>전처리 필요</td></tr>
+            <tr><td>16</td><td><code>동료24</code></td><td>전처리 필요</td></tr>
+            <tr><td>17</td><td><code>동료25</code></td><td>전처리 필요</td></tr>
+            <tr><td>18</td><td><code>동료코멘트</code></td><td>전처리 필요</td></tr>
+            <tr><td>19</td><td><code>부하23</code></td><td>전처리 필요</td></tr>
+            <tr><td>20</td><td><code>부하24</code></td><td>전처리 필요</td></tr>
+            <tr><td>21</td><td><code>부하25</code></td><td>전처리 필요</td></tr>
+            <tr><td>22</td><td><code>부하코멘트</code></td><td>전처리 필요</td></tr>
+          </tbody>
+        </table>
+
         </div>
 
+        <div class="step-group">
+        <h3 id="step8-2-1">②-1 학력 전처리 (SELECT → JOIN)</h3>
+        <p>인사정보의 <code>educations</code> 배열을 하나의 문자열로 변환합니다.</p>
+
+        <p><strong>"+" → "데이터 작업" → "선택" 추가</strong></p>
+        <table>
+          <thead><tr><th>항목</th><th>값</th></tr></thead>
+          <tbody>
+            <tr><td>원본</td><td>JSON 구문 분석의 Body <code>educations</code></td></tr>
+            <tr><td>맵</td><td>텍스트 모드로 전환 → 수식:<br><code>concat(item()?['school'], ' ', item()?['major'], ' ', item()?['degree'])</code></td></tr>
+          </tbody>
+        </table>
+        <p>이름을 <strong>"학력 select"</strong>로 변경합니다.</p>
+
+        <div class="callout">
+          <code>concat()</code>: 여러 문자열을 이어 붙이는 함수입니다.<br>
+          <code>item()?['school']</code>: 현재 배열 항목의 <code>school</code> 값을 가져옵니다.<br>
+          결과 예시: <code>"서울대학교 컴퓨터공학 학사"</code>
+        </div>
+
+        <p><strong>"+" → "데이터 작업" → "조인" 추가</strong></p>
+        <table>
+          <thead><tr><th>항목</th><th>값</th></tr></thead>
+          <tbody>
+            <tr><td>원본</td><td>학력 select의 <strong>출력</strong></td></tr>
+            <tr><td>다음으로 조인</td><td><code>" / "</code> (슬래시 양쪽 공백 포함)</td></tr>
+          </tbody>
+        </table>
+        <p>이름을 <strong>"학력 join"</strong>으로 변경합니다.</p>
+
+        <div class="callout">
+          최종 결과 예시: <code>"서울대학교 화학공학 학사 / MIT 화학공학 석사"</code>
+        </div>
+
+        <div class="img-box">
+          <img src="images/step8-2-1-education.png" alt="학력 전처리 SELECT → JOIN 설정 화면" />
+        </div>
+        </div>
+
+        <div class="step-group">
+        <h3 id="step8-2-2">②-2 주요경력 전처리 (SELECT → JOIN)</h3>
+        <p>인사정보의 <code>careers</code> 배열을 하나의 문자열로 변환합니다.</p>
+
+        <p><strong>"+" → "데이터 작업" → "선택" 추가</strong></p>
+        <table>
+          <thead><tr><th>항목</th><th>값</th></tr></thead>
+          <tbody>
+            <tr><td>원본</td><td>JSON 구문 분석의 Body <code>careers</code></td></tr>
+            <tr><td>맵</td><td>텍스트 모드로 전환 → 수식:<br><code>concat(item()?['company'], ' ', item()?['department'], ' ', item()?['role'], ' (', item()?['startDate'], '~', if(item()?['isCurrent'], '재직중', item()?['endDate']), ')')</code></td></tr>
+          </tbody>
+        </table>
+        <p>이름을 <strong>"주요경력 select"</strong>로 변경합니다.</p>
+
+        <div class="callout">
+          <code>if(item()?['isCurrent'], '재직중', item()?['endDate'])</code>: <code>isCurrent</code>가 true이면 <code>"재직중"</code>, 아니면 종료일을 표시합니다.<br>
+          결과 예시: <code>"SK케미칼 전략기획팀 부장 (2013-03-01~재직중)"</code>
+        </div>
+
+        <p><strong>"+" → "데이터 작업" → "조인" 추가</strong></p>
+        <table>
+          <thead><tr><th>항목</th><th>값</th></tr></thead>
+          <tbody>
+            <tr><td>원본</td><td>주요경력 select의 <strong>출력</strong></td></tr>
+            <tr><td>다음으로 조인</td><td><code>" / "</code> (슬래시 양쪽 공백 포함)</td></tr>
+          </tbody>
+        </table>
+        <p>이름을 <strong>"주요경력 join"</strong>으로 변경합니다.</p>
+
+        <div class="callout">
+          최종 결과 예시: <code>"삼성전자 기획팀 사원 (2008-03-01~2013-02-28) / SK케미칼 전략기획팀 부장 (2013-03-01~재직중)"</code>
+        </div>
+
+        <div class="img-box">
+          <img src="images/step8-2-2-career.png" alt="주요경력 전처리 SELECT → JOIN 설정 화면" />
+        </div>
+        </div>
+
+        <div class="step-group">
+        <h3 id="step8-2-3">②-3 업적·역량·코멘트 전처리 (배열 필터링)</h3>
+        <p>평가정보의 <code>evaluations</code> 배열을 연도별로 필터링하여 업적/역량/코멘트 값을 추출합니다.</p>
+
+        <p><strong>"+" → "데이터 작업" → "배열 필터링" 추가</strong></p>
+        <table>
+          <thead><tr><th>항목</th><th>값</th></tr></thead>
+          <tbody>
+            <tr><td>From</td><td>JSON 구문 분석 1의 Body <code>evaluations</code></td></tr>
+            <tr><td>Filter Query</td><td>좌측: JSON 구문 분석 1의 <code>year</code> 선택 / 가운데: <strong>다음과 같음</strong> / 우측: <code>2023</code></td></tr>
+          </tbody>
+        </table>
+        <p>이름을 <strong>"평가 필터링 0"</strong>으로 변경합니다.</p>
+
+        <p>동일한 방식으로 2024, 2025에 대해서도 배열 필터링을 추가합니다.</p>
+        <table>
+          <thead><tr><th>이름</th><th>Filter Query 우측 값</th></tr></thead>
+          <tbody>
+            <tr><td><strong>평가 필터링 1</strong></td><td><code>2024</code></td></tr>
+            <tr><td><strong>평가 필터링 2</strong></td><td><code>2025</code></td></tr>
+          </tbody>
+        </table>
+
+        <div class="callout">
+          <code>first()</code>: 필터링 결과 배열의 첫 번째 항목을 가져옵니다.<br>
+          Word 템플릿 채우기에서 각 필드에 아래 수식을 사용합니다.
+        </div>
+
+        <table>
+          <thead><tr><th>필드</th><th>수식</th></tr></thead>
+          <tbody>
+            <tr><td><code>업적23</code></td><td><code>first(body('평가_필터링_0'))?['performanceGrade']</code></td></tr>
+            <tr><td><code>역량23</code></td><td><code>first(body('평가_필터링_0'))?['competencyGrade']</code></td></tr>
+            <tr><td><code>코멘트23</code></td><td><code>first(body('평가_필터링_0'))?['comment']?['text']</code></td></tr>
+            <tr><td><code>업적24</code></td><td><code>first(body('평가_필터링_1'))?['performanceGrade']</code></td></tr>
+            <tr><td><code>역량24</code></td><td><code>first(body('평가_필터링_1'))?['competencyGrade']</code></td></tr>
+            <tr><td><code>코멘트24</code></td><td><code>first(body('평가_필터링_1'))?['comment']?['text']</code></td></tr>
+            <tr><td><code>업적25</code></td><td><code>first(body('평가_필터링_2'))?['performanceGrade']</code></td></tr>
+            <tr><td><code>역량25</code></td><td><code>first(body('평가_필터링_2'))?['competencyGrade']</code></td></tr>
+            <tr><td><code>코멘트25</code></td><td><code>first(body('평가_필터링_2'))?['comment']?['text']</code></td></tr>
+          </tbody>
+        </table>
+
+        <div class="img-box">
+          <img src="images/step8-2-3-eval-filter.png" alt="평가 필터링 설정 화면" />
+        </div>
+        </div>
+
+        <div class="step-group">
+        <h3 id="step8-2-4">②-4 동료·부하 리더십 서베이 전처리 (배열 필터링)</h3>
+        <p>각 연도별 <code>leadershipSurveys</code> 배열에서 동료/부하 평가를 필터링합니다.</p>
+
+        <h4>동료 필터링 (3개)</h4>
+        <p><strong>"+" → "데이터 작업" → "배열 필터링" 추가</strong></p>
+        <table>
+          <thead><tr><th>항목</th><th>값</th></tr></thead>
+          <tbody>
+            <tr><td>From</td><td>수식: <code>first(body('평가_필터링_0'))?['leadershipSurveys']</code></td></tr>
+            <tr><td>Filter Query</td><td>좌측: 수식(fx) → <code>item()?['evaluatorType']</code> / 가운데: <strong>다음과 같음</strong> / 우측: <code>동료</code></td></tr>
+          </tbody>
+        </table>
+        <p>이름을 <strong>"동료 필터링 0"</strong>으로 변경합니다.</p>
+
+        <p>동일한 방식으로 나머지 연도도 추가합니다.</p>
+        <table>
+          <thead><tr><th>이름</th><th>From 수식</th></tr></thead>
+          <tbody>
+            <tr><td><strong>동료 필터링 1</strong></td><td><code>first(body('평가_필터링_1'))?['leadershipSurveys']</code></td></tr>
+            <tr><td><strong>동료 필터링 2</strong></td><td><code>first(body('평가_필터링_2'))?['leadershipSurveys']</code></td></tr>
+          </tbody>
+        </table>
+
+        <h4>부하 필터링 (3개)</h4>
+        <p>동료 필터링과 동일하게 추가하되, Filter Query 우측 값을 <code>부하</code>로 변경합니다.</p>
+        <table>
+          <thead><tr><th>이름</th><th>From 수식</th></tr></thead>
+          <tbody>
+            <tr><td><strong>부하 필터링 0</strong></td><td><code>first(body('평가_필터링_0'))?['leadershipSurveys']</code></td></tr>
+            <tr><td><strong>부하 필터링 1</strong></td><td><code>first(body('평가_필터링_1'))?['leadershipSurveys']</code></td></tr>
+            <tr><td><strong>부하 필터링 2</strong></td><td><code>first(body('평가_필터링_2'))?['leadershipSurveys']</code></td></tr>
+          </tbody>
+        </table>
+        <p>Filter Query: 좌측 수식(fx) → <code>item()?['evaluatorType']</code> / 가운데: <strong>다음과 같음</strong> / 우측: <code>부하</code></p>
+
+        <h4>Word 템플릿 매핑 수식</h4>
+        <table>
+          <thead><tr><th>필드</th><th>수식</th></tr></thead>
+          <tbody>
+            <tr><td><code>동료23</code></td><td><code>first(body('동료_필터링_0'))?['score']</code></td></tr>
+            <tr><td><code>동료24</code></td><td><code>first(body('동료_필터링_1'))?['score']</code></td></tr>
+            <tr><td><code>동료25</code></td><td><code>first(body('동료_필터링_2'))?['score']</code></td></tr>
+            <tr><td><code>동료코멘트</code></td><td><code>concat(first(body('동료_필터링_2'))?['strengthComment'], ' / ', first(body('동료_필터링_2'))?['developmentComment'])</code></td></tr>
+            <tr><td><code>부하23</code></td><td><code>first(body('부하_필터링_0'))?['score']</code></td></tr>
+            <tr><td><code>부하24</code></td><td><code>first(body('부하_필터링_1'))?['score']</code></td></tr>
+            <tr><td><code>부하25</code></td><td><code>first(body('부하_필터링_2'))?['score']</code></td></tr>
+            <tr><td><code>부하코멘트</code></td><td><code>concat(first(body('부하_필터링_2'))?['strengthComment'], ' / ', first(body('부하_필터링_2'))?['developmentComment'])</code></td></tr>
+          </tbody>
+        </table>
+
+        <div class="callout">
+          동료코멘트/부하코멘트는 최신 연도(필터링 2)의 강점과 개발 필요사항을 <code>" / "</code>로 합칩니다.<br>
+          결과 예시: <code>"협업 중심의 리더십 / 의사결정 속도 개선"</code>
+        </div>
+
+        </div>
+
+        <div class="step-group">
+        <h3 id="step8-3">③ Word 문서 생성</h3>
+        <p>전처리 완료 후 Word 템플릿에 25개 필드를 매핑하여 문서를 생성합니다.</p>
+
         <div class="step">
-          <span class="step-number">10</span>
+          <span class="step-number">11</span>
           <div class="step-content">
             <strong>"+ 새 단계" → "Word Online (Business)" → "Microsoft Word 템플릿 채우기"</strong>
           </div>
         </div>
 
         <div class="step">
-          <span class="step-number">11</span>
+          <span class="step-number">12</span>
           <div class="step-content">
             <strong>위치: "OneDrive for Business", 문서 라이브러리: "문서"</strong>
           </div>
         </div>
 
         <div class="step">
-          <span class="step-number">12</span>
+          <span class="step-number">13</span>
           <div class="step-content">
             <strong>파일: <code>/HR_프로필/케미칼용_결과양식_template.docx</code></strong>
             <p>파일 선택 후 <strong>"고급 매개 변수"</strong> → <strong>"모두 보기"</strong>를 클릭하면 25개 콘텐츠 컨트롤 필드가 표시됩니다. 각 필드에 아래 값을 매핑합니다.</p>
@@ -1400,35 +1766,31 @@
         </div>
 
         <h4>25개 필드 매핑 표</h4>
-        <div class="callout">
-          <strong>규칙:</strong> 인사정보 필드는 <code>body('JSON_구문_분석')?['data']?['필드명']</code>, 평가정보 필드는 <code>body('JSON_구문_분석_1')?['data']?['필드명']</code>으로 참조합니다.<br>
-          연도 접미사: <code>_N2</code> = 3년 전, <code>_N1</code> = 2년 전, <code>_N</code> = 최근년도 (예: 2023, 2024, 2025)
-        </div>
         <table>
           <thead><tr><th>#</th><th>필드</th><th>매핑 값 (수식 또는 데이터 선택)</th></tr></thead>
           <tbody>
             <tr><td>1</td><td><code>성명_생년월</code></td><td>수식: <code>concat(body('JSON_구문_분석')?['data']?['name'], ' (', body('JSON_구문_분석')?['data']?['birthDate'], ')')</code></td></tr>
             <tr><td>2</td><td><code>소속</code></td><td>데이터 선택: JSON 구문 분석 → data → <code>department</code></td></tr>
             <tr><td>3</td><td><code>직책_연차</code></td><td>수식: <code>concat(body('JSON_구문_분석')?['data']?['position'], ' / ', body('JSON_구문_분석')?['data']?['tenure'], '년')</code></td></tr>
-            <tr><td>4</td><td><code>학력</code></td><td>데이터 선택: JSON 구문 분석 → data → <code>educationSummary</code></td></tr>
-            <tr><td>5</td><td><code>주요경력</code></td><td>데이터 선택: JSON 구문 분석 → data → <code>careerSummary</code></td></tr>
-            <tr><td>6</td><td><code>업적23</code></td><td>데이터 선택: JSON 구문 분석 1 → data → <code>performance_N2</code></td></tr>
-            <tr><td>7</td><td><code>업적24</code></td><td>데이터 선택: JSON 구문 분석 1 → data → <code>performance_N1</code></td></tr>
-            <tr><td>8</td><td><code>업적25</code></td><td>데이터 선택: JSON 구문 분석 1 → data → <code>performance_N</code></td></tr>
-            <tr><td>9</td><td><code>역량23</code></td><td>데이터 선택: JSON 구문 분석 1 → data → <code>competency_N2</code></td></tr>
-            <tr><td>10</td><td><code>역량24</code></td><td>데이터 선택: JSON 구문 분석 1 → data → <code>competency_N1</code></td></tr>
-            <tr><td>11</td><td><code>역량25</code></td><td>데이터 선택: JSON 구문 분석 1 → data → <code>competency_N</code></td></tr>
-            <tr><td>12</td><td><code>코멘트23</code></td><td>데이터 선택: JSON 구문 분석 1 → data → <code>supervisorReview_N2</code></td></tr>
-            <tr><td>13</td><td><code>코멘트24</code></td><td>데이터 선택: JSON 구문 분석 1 → data → <code>supervisorReview_N1</code></td></tr>
-            <tr><td>14</td><td><code>코멘트25</code></td><td>데이터 선택: JSON 구문 분석 1 → data → <code>supervisorReview_N</code></td></tr>
-            <tr><td>15</td><td><code>동료23</code></td><td>데이터 선택: JSON 구문 분석 1 → data → <code>peerScore_N2</code></td></tr>
-            <tr><td>16</td><td><code>동료24</code></td><td>데이터 선택: JSON 구문 분석 1 → data → <code>peerScore_N1</code></td></tr>
-            <tr><td>17</td><td><code>동료25</code></td><td>데이터 선택: JSON 구문 분석 1 → data → <code>peerScore_N</code></td></tr>
-            <tr><td>18</td><td><code>동료코멘트</code></td><td>데이터 선택: JSON 구문 분석 1 → data → <code>peerComment_N</code></td></tr>
-            <tr><td>19</td><td><code>부하23</code></td><td>데이터 선택: JSON 구문 분석 1 → data → <code>subordinateScore_N2</code></td></tr>
-            <tr><td>20</td><td><code>부하24</code></td><td>데이터 선택: JSON 구문 분석 1 → data → <code>subordinateScore_N1</code></td></tr>
-            <tr><td>21</td><td><code>부하25</code></td><td>데이터 선택: JSON 구문 분석 1 → data → <code>subordinateScore_N</code></td></tr>
-            <tr><td>22</td><td><code>부하코멘트</code></td><td>데이터 선택: JSON 구문 분석 1 → data → <code>subordinateComment_N</code></td></tr>
+            <tr><td>4</td><td><code>학력</code></td><td>데이터 선택: 학력 join → <strong>출력</strong></td></tr>
+            <tr><td>5</td><td><code>주요경력</code></td><td>데이터 선택: 주요경력 join → <strong>출력</strong></td></tr>
+            <tr><td>6</td><td><code>업적23</code></td><td>수식: <code>first(body('평가_필터링_0'))?['performanceGrade']</code></td></tr>
+            <tr><td>7</td><td><code>업적24</code></td><td>수식: <code>first(body('평가_필터링_1'))?['performanceGrade']</code></td></tr>
+            <tr><td>8</td><td><code>업적25</code></td><td>수식: <code>first(body('평가_필터링_2'))?['performanceGrade']</code></td></tr>
+            <tr><td>9</td><td><code>역량23</code></td><td>수식: <code>first(body('평가_필터링_0'))?['competencyGrade']</code></td></tr>
+            <tr><td>10</td><td><code>역량24</code></td><td>수식: <code>first(body('평가_필터링_1'))?['competencyGrade']</code></td></tr>
+            <tr><td>11</td><td><code>역량25</code></td><td>수식: <code>first(body('평가_필터링_2'))?['competencyGrade']</code></td></tr>
+            <tr><td>12</td><td><code>코멘트23</code></td><td>수식: <code>first(body('평가_필터링_0'))?['comment']?['text']</code></td></tr>
+            <tr><td>13</td><td><code>코멘트24</code></td><td>수식: <code>first(body('평가_필터링_1'))?['comment']?['text']</code></td></tr>
+            <tr><td>14</td><td><code>코멘트25</code></td><td>수식: <code>first(body('평가_필터링_2'))?['comment']?['text']</code></td></tr>
+            <tr><td>15</td><td><code>동료23</code></td><td>수식: <code>first(body('동료_필터링_0'))?['score']</code></td></tr>
+            <tr><td>16</td><td><code>동료24</code></td><td>수식: <code>first(body('동료_필터링_1'))?['score']</code></td></tr>
+            <tr><td>17</td><td><code>동료25</code></td><td>수식: <code>first(body('동료_필터링_2'))?['score']</code></td></tr>
+            <tr><td>18</td><td><code>동료코멘트</code></td><td>수식: <code>concat(first(body('동료_필터링_2'))?['strengthComment'], ' / ', first(body('동료_필터링_2'))?['developmentComment'])</code></td></tr>
+            <tr><td>19</td><td><code>부하23</code></td><td>수식: <code>first(body('부하_필터링_0'))?['score']</code></td></tr>
+            <tr><td>20</td><td><code>부하24</code></td><td>수식: <code>first(body('부하_필터링_1'))?['score']</code></td></tr>
+            <tr><td>21</td><td><code>부하25</code></td><td>수식: <code>first(body('부하_필터링_2'))?['score']</code></td></tr>
+            <tr><td>22</td><td><code>부하코멘트</code></td><td>수식: <code>concat(first(body('부하_필터링_2'))?['strengthComment'], ' / ', first(body('부하_필터링_2'))?['developmentComment'])</code></td></tr>
             <tr><td>23</td><td><code>주요역량_직무전문성</code></td><td>데이터 선택: 변수 → <code>주요역량</code></td></tr>
             <tr><td>24</td><td><code>상위역할_준비도</code></td><td>데이터 선택: 변수 → <code>상위역할</code></td></tr>
             <tr><td>25</td><td><code>종합의견</code></td><td>데이터 선택: 변수 → <code>종합의견</code></td></tr>
@@ -1437,24 +1799,24 @@
         </div>
 
         <div class="step-group">
-        <h3 id="step8-3">③ OneDrive에 저장</h3>
+        <h3 id="step8-4">④ OneDrive에 저장</h3>
 
         <div class="step">
-          <span class="step-number">13</span>
+          <span class="step-number">15</span>
           <div class="step-content">
             <strong>"+ 새 단계" → "비즈니스용 OneDrive" → "파일 만들기"</strong>
           </div>
         </div>
 
         <div class="step">
-          <span class="step-number">14</span>
+          <span class="step-number">16</span>
           <div class="step-content">
             <strong>설정:</strong>
             <table>
               <thead><tr><th>항목</th><th>값</th></tr></thead>
               <tbody>
                 <tr><td>폴더 경로</td><td><code>/HR_프로필</code></td></tr>
-                <tr><td>파일 이름</td><td>수식: <code>concat('hrprofile_', body('JSON_구문_분석')?['data']?['name'], '_', formatDateTime(utcNow(),'yyyyMMddHHmmss'), '.docx')</code></td></tr>
+                <tr><td>파일 이름</td><td>수식: <code>concat('hrprofile_', body('JSON_구문_분석')?['name'], '_', formatDateTime(utcNow(),'yyyyMMddHHmmss'), '.docx')</code></td></tr>
                 <tr><td>파일 콘텐츠</td><td>Word 템플릿의 <strong>"Microsoft Word 문서"</strong> 출력</td></tr>
               </tbody>
             </table>
@@ -1467,18 +1829,18 @@
         </div>
 
         <div class="step-group">
-        <h3 id="step8-4">④ 공유 링크 생성 및 에이전트에게 반환</h3>
+        <h3 id="step8-5">⑤ 공유 링크 생성 및 에이전트에게 반환</h3>
         <p>생성된 파일의 공유 링크를 만들어 에이전트 사용자가 바로 열 수 있도록 합니다.</p>
 
         <div class="step">
-          <span class="step-number">15</span>
+          <span class="step-number">17</span>
           <div class="step-content">
             <strong>"+ 새 단계" → "비즈니스용 OneDrive" → "공유 링크 만들기" 선택</strong>
           </div>
         </div>
 
         <div class="step">
-          <span class="step-number">16</span>
+          <span class="step-number">18</span>
           <div class="step-content">
             <strong>설정:</strong>
             <table>
@@ -1486,7 +1848,7 @@
               <tbody>
                 <tr><td>파일 ID</td><td>데이터 선택: 파일 만들기 → <strong>"ID"</strong></td></tr>
                 <tr><td>링크 유형</td><td><strong>"View"</strong></td></tr>
-                <tr><td>링크 범위</td><td><strong>"Organization"</strong></td></tr>
+                <tr><td>링크 범위</td><td><strong>"조직"</strong> (같은 회사 사용자가 볼 수 있도록)</td></tr>
               </tbody>
             </table>
           </div>
@@ -1499,7 +1861,7 @@
         <h4>에이전트에게 응답</h4>
 
         <div class="step">
-          <span class="step-number">17</span>
+          <span class="step-number">19</span>
           <div class="step-content">
             <strong>마지막 "에이전트에게 응답" 단계에 텍스트 출력 추가:</strong>
             <table>
@@ -1684,7 +2046,7 @@
           <li>Power Automate에서 "인스턴트 클라우드 흐름" 생성</li>
           <li>"HTTP" 액션 추가 → 메서드: <strong>GET</strong>, URI: <code>https://dbswhdgk931-prog.github.io/files/skchem_result_template.docx</code></li>
           <li>"OneDrive for Business — 파일 만들기" 액션 추가</li>
-          <li>폴더 경로: 원하는 OneDrive 폴더 선택, 파일 이름: <code>skchem_result_template.docx</code>, 파일 콘텐츠: HTTP 응답의 <strong>Body</strong></li>
+          <li>폴더 경로: 원하는 OneDrive 폴더 선택, 파일 이름: <code>skchem_result_template.docx</code>, 파일 콘텐츠: HTTP 응답의 <strong>본문</strong></li>
           <li>흐름 실행 → OneDrive에 파일 생성 확인</li>
         </ol>
       </section>
