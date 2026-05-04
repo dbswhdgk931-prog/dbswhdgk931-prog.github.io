@@ -1374,10 +1374,6 @@
         <h3 id="step8-2">② Word 문서 생성</h3>
         <p>Word 템플릿에 25개 필드를 매핑하여 문서를 생성합니다. v2 API는 데이터가 이미 전처리되어 있으므로 JSON 구문 분석 결과를 바로 매핑할 수 있습니다.</p>
 
-        <div class="callout" style="background:#f0fdf4;border-left-color:#22c55e;">
-          <strong>v2 API 장점:</strong> 학력·경력은 <code>educationSummary</code>, <code>careerSummary</code> 등 문자열로 제공되고, 평가 데이터는 <code>performance_N</code>, <code>peerScore_N2</code> 등 연도별 접미사(_N, _N1, _N2)로 플랫하게 제공되므로 별도 전처리(SELECT→JOIN, 배열 필터링)가 필요 없습니다.
-        </div>
-
         <div class="step">
           <span class="step-number">10</span>
           <div class="step-content">
