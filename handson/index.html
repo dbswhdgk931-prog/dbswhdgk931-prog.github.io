@@ -29,6 +29,7 @@
         <a href="#step8-4" class="nav-sub">④ 공유 링크 · 에이전트 반환</a>
         <a href="#step9">Step 9: 최종 테스트</a>
         <a href="#reference">참고</a>
+        <a href="#ref-file-upload" class="nav-sub">파일 업로드 차단 시 조치법</a>
       </nav>
     </aside>
 
@@ -1678,14 +1679,21 @@
       <section id="reference">
         <h2>참고</h2>
 
-        <h3>Power Automate로 파일을 OneDrive에 추가하는 법</h3>
-        <p>회사 보안 정책으로 파일 업로드가 차단된 경우, Power Automate를 사용하여 OneDrive에 파일을 가져올 수 있습니다.</p>
+        <h3 id="ref-file-upload">파일 업로드 차단 시 조치법</h3>
+        <p>회사 보안 정책으로 파일 업로드가 차단된 경우, 흐름을 사용하여 OneDrive에 파일을 가져올 수 있습니다.</p>
         <ol>
-          <li>Power Automate에서 "인스턴트 클라우드 흐름" 생성</li>
-          <li>"HTTP" 액션 추가 → 메서드: <strong>GET</strong>, URI: <code>https://dbswhdgk931-prog.github.io/files/skchem_result_template.docx</code></li>
-          <li>"OneDrive for Business — 파일 만들기" 액션 추가</li>
-          <li>폴더 경로: 원하는 OneDrive 폴더 선택, 파일 이름: <code>skchem_result_template.docx</code>, 파일 콘텐츠: HTTP 응답의 <strong>Body</strong></li>
-          <li>흐름 실행 → OneDrive에 파일 생성 확인</li>
+          <li>Copilot Studio → 좌측 <strong>흐름</strong> 메뉴 > <strong>+ 새 에이전트 흐름</strong></li>
+          <li>트리거 추가 — <strong>수동으로 흐름 트리거</strong></li>
+          <li>작업 추가 — <strong>URL에서 파일 업로드</strong> (총 3개 작업 추가)
+            <ul>
+              <li>원본 URL: <code>https://dbswhdgk931-prog.github.io/files/skchem_result_template.docx</code><br>대상 파일 경로: <code>/HR_프로필/skchem_result_template.docx</code></li>
+              <li>원본 URL: <code>https://dbswhdgk931-prog.github.io/files/Knowledge_역량항목_채점기준.xlsx</code><br>대상 파일 경로: <code>/HR_프로필/Knowledge_역량항목_채점기준.xlsx</code></li>
+              <li>원본 URL: <code>https://dbswhdgk931-prog.github.io/files/Knowledge_포지션별_요구역량.xlsx</code><br>대상 파일 경로: <code>/HR_프로필/Knowledge_포지션별_요구역량.xlsx</code></li>
+            </ul>
+          </li>
+          <li>우측 상단 <strong>게시</strong> 클릭</li>
+          <li><strong>테스트</strong> 클릭 > <strong>수동</strong> 선택 > <strong>테스트</strong> 클릭</li>
+          <li>좌측 상단 앱 시작 관리자(<strong>⋮⋮⋮</strong>) > <strong>OneDrive</strong> 클릭 > <code>HR_프로필</code> 경로에 3개 파일이 정상 생성되었는지 확인</li>
         </ol>
       </section>
 
