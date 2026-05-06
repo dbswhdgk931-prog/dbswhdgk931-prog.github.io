@@ -408,8 +408,11 @@
             <strong>좌측 메뉴 "에이전트" → "개요" → "지침" 영역에 아래 내용 입력 후 "저장"</strong>
 <pre><code>당신은 SK케미칼 HR Data 원큐 Agent입니다.
 
+
 ### 답변 가능
-- 구성원의 프로필 생성 요청은 /프로필 생성 토픽으로 연결합니다.
+- 구성원의 프로필 생성 요청(프로필 생성해줘, 프로필 생성 요청, 프로필 생성 등)은
+프로필 생성
+  토픽으로 연결합니다.
 
 ### 답변 불가
 - 답변 가능 항목 외 모든 문의는 "해당 문의에는 답변할 수 없습니다." 로 답변합니다.</code></pre>
@@ -638,7 +641,7 @@
         <div class="step">
           <span class="step-number">3</span>
           <div class="step-content">
-            <strong>좌측 하단 "테스트" 버튼 클릭</strong>
+            <strong>우측 상단 "테스트" 버튼 클릭</strong>
           </div>
         </div>
 
@@ -1594,7 +1597,11 @@
 
         <h3>완성된 토픽 흐름</h3>
 
-<pre><code>💬 대화 시작        ← 인사 메시지 출력 후 "프로필 생성" 토픽으로 이동
+<pre><code>💬 대화 시작        ← 에이전트가 인사 메시지 출력
+   ↓
+👤 사용자 요청      ← "프로필 생성해줘" 등 프로필 생성 요청 텍스트 입력
+   ↓
+🔀 토픽 이동        ← 에이전트 지침에 따라 "프로필 생성" 토픽으로 자동 라우팅
    ↓
 ❓ 사번 질문        ← 사용자 응답 → Topic.사번 변수에 저장
    ↓
@@ -1622,40 +1629,47 @@
         <div class="step">
           <span class="step-number">2</span>
           <div class="step-content">
-            <strong>사번 입력 요청이 나타나면 <code>EMP070</code> 입력</strong>
+            <strong>에이전트 인사 메시지 확인 후 <code>프로필 생성해줘</code> 입력</strong>
           </div>
         </div>
 
         <div class="step">
           <span class="step-number">3</span>
           <div class="step-content">
-            <strong>AI 역량 분석 결과 표시 확인</strong>
+            <strong>사번 입력 요청이 나타나면 <code>EMP070</code> 입력</strong>
           </div>
         </div>
 
         <div class="step">
           <span class="step-number">4</span>
           <div class="step-content">
-            <strong>"승인" 선택</strong>
+            <strong>AI 역량 분석 결과 표시 확인</strong>
           </div>
         </div>
 
         <div class="step">
           <span class="step-number">5</span>
           <div class="step-content">
-            <strong>에이전트 흐름 실행 → OneDrive 공유 링크 표시 확인</strong>
+            <strong>"승인" 선택</strong>
           </div>
         </div>
 
         <div class="step">
           <span class="step-number">6</span>
           <div class="step-content">
-            <strong>링크 클릭하여 Word 문서가 정상적으로 열리는지 확인</strong>
+            <strong>에이전트 흐름 실행 → OneDrive 공유 링크 표시 확인</strong>
           </div>
         </div>
 
         <div class="step">
           <span class="step-number">7</span>
+          <div class="step-content">
+            <strong>링크 클릭하여 Word 문서가 정상적으로 열리는지 확인</strong>
+          </div>
+        </div>
+
+        <div class="step">
+          <span class="step-number">8</span>
           <div class="step-content">
             <strong>OneDrive <code>/HR_프로필/</code> 폴더에 결과 파일 생성 확인</strong>
           </div>
