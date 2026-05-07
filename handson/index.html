@@ -631,6 +631,10 @@
           </div>
         </div>
 
+        <div class="img-box">
+          <img src="images/test-message-node.png" alt="메시지 보내기 노드 추가" />
+        </div>
+
         <div class="step">
           <span class="step-number">2</span>
           <div class="step-content">
@@ -654,6 +658,10 @@
 
         <div class="test-result">
           ✅ 인사정보·평가정보 JSON이 메시지로 표시되면 성공
+        </div>
+
+        <div class="img-box">
+          <img src="images/test-result-success.png" alt="테스트 성공 결과" />
         </div>
 
         <div class="step">
@@ -703,19 +711,26 @@
         <div class="step">
           <span class="step-number">3</span>
           <div class="step-content">
-            <strong>"선택한 원본만 검색" → 켜기</strong>
+            <strong>"데이터 원본 <span style="color:#5b21b6;">✏️ <span style="text-decoration:underline;">편집</span></span>" 클릭</strong>
           </div>
         </div>
 
         <div class="step">
           <span class="step-number">4</span>
           <div class="step-content">
-            <strong>2개 파일 모두 선택</strong>
+            <strong>"선택한 원본만 검색" → 켜기</strong>
           </div>
         </div>
 
         <div class="step">
           <span class="step-number">5</span>
+          <div class="step-content">
+            <strong>2개 파일 모두 선택</strong>
+          </div>
+        </div>
+
+        <div class="step">
+          <span class="step-number">6</span>
           <div class="step-content">
             <strong>"웹 검색" → 끄기</strong>
           </div>
@@ -764,18 +779,18 @@
         </div>
 
         <div class="step-group">
-        <h3>분석 프롬프트 입력 (데이터 변수 삽입 포함)</h3>
-        <p>프롬프트 안에 <strong>API 데이터 변수를 직접 삽입</strong>하여 AI가 실제 데이터를 참조할 수 있게 합니다.</p>
+        <h3>분석 지침 입력 (데이터 변수 삽입 포함)</h3>
+        <p>지침 안에 <strong>API 데이터 변수를 직접 삽입</strong>하여 AI가 실제 데이터를 참조할 수 있게 합니다.</p>
 
         <div class="step">
           <span class="step-number">10</span>
           <div class="step-content">
-            <strong>"프롬프트" 영역(0/8000)에 아래 내용을 추가합니다.</strong>
+            <strong>"콘텐츠 조정 수준" 아래 사용자 지정 지침 영역(0/8000)에 다음 내용을 추가합니다.</strong>
           </div>
         </div>
 
         <div class="callout">
-          <strong>프롬프트 작성 방법:</strong> 아래에서 <code>🔵 {x} Topic.인사정보_문자열</code>과 <code>🔵 {x} Topic.평가정보_문자열</code> 부분은 직접 타이핑하는 것이 아닙니다. 해당 위치에서 <strong><code>{x}</code> 아이콘</strong> 클릭 → <strong>"사용자 지정"</strong> 탭 → <code>인사정보_문자열</code> 또는 <code>평가정보_문자열</code> 변수를 선택하면 자동으로 삽입됩니다.
+          <strong>지침 작성 방법:</strong> 아래에서 <code>🔵 {x} Topic.인사정보_문자열</code>과 <code>🔵 {x} Topic.평가정보_문자열</code> 부분은 직접 타이핑하는 것이 아닙니다. 해당 위치에서 <strong><code>{x}</code> 아이콘</strong> 클릭 → <strong>"사용자 지정"</strong> 탭 → <code>인사정보_문자열</code> 또는 <code>평가정보_문자열</code> 변수를 선택하면 자동으로 삽입됩니다.
         </div>
 
 <pre><code>당신은 SK케미칼 HR 역량 분석 전문가입니다.
@@ -1016,7 +1031,7 @@
         <div class="step">
           <span class="step-number">2</span>
           <div class="step-content">
-            <strong>OneDrive 루트에 "HR_프로필" 폴더 생성</strong>
+            <strong>좌측 "내 파일" 메뉴 클릭 → "+만들기 또는 업로드" &gt; 폴더 선택하여 "HR_프로필" 이름의 폴더를 생성합니다.</strong>
           </div>
         </div>
 
@@ -1026,6 +1041,10 @@
             <strong>해당 폴더에 <a href="https://dbswhdgk931-prog.github.io/files/skchem_result_template.docx"><code>skchem_result_template.docx</code></a> 업로드</strong>
             <p>이 문서는 Word의 "콘텐츠 컨트롤" 기능을 활용하여, 에이전트 흐름이 정해진 위치에 데이터를 자동으로 채워 넣을 수 있도록 미리 세팅해 둔 양식입니다.</p>
           </div>
+        </div>
+
+        <div class="img-box">
+          <img src="images/step7-onedrive-folder.png" alt="OneDrive 폴더 생성 및 템플릿 업로드" />
         </div>
         </div>
 
@@ -1408,27 +1427,27 @@
           <thead><tr><th>#</th><th>필드</th><th>매핑 값 (수식 또는 데이터 선택)</th></tr></thead>
           <tbody>
             <tr><td>1</td><td><code>성명_생년월</code></td><td>수식: <code>concat(body('JSON_구문_분석')?['data']?['name'], ' (', body('JSON_구문_분석')?['data']?['birthDate'], ')')</code></td></tr>
-            <tr><td>2</td><td><code>소속</code></td><td>데이터 선택: JSON 구문 분석 → data → <code>department</code></td></tr>
+            <tr><td>2</td><td><code>소속</code></td><td>데이터 선택: JSON 구문 분석 → <code>Body department</code></td></tr>
             <tr><td>3</td><td><code>직책_연차</code></td><td>수식: <code>concat(body('JSON_구문_분석')?['data']?['position'], ' / ', body('JSON_구문_분석')?['data']?['tenure'], '년')</code></td></tr>
-            <tr><td>4</td><td><code>학력</code></td><td>데이터 선택: JSON 구문 분석 → data → <code>educationSummary</code></td></tr>
-            <tr><td>5</td><td><code>주요경력</code></td><td>데이터 선택: JSON 구문 분석 → data → <code>careerSummary</code></td></tr>
-            <tr><td>6</td><td><code>업적23</code></td><td>데이터 선택: JSON 구문 분석 1 → data → <code>performance_N2</code></td></tr>
-            <tr><td>7</td><td><code>업적24</code></td><td>데이터 선택: JSON 구문 분석 1 → data → <code>performance_N1</code></td></tr>
-            <tr><td>8</td><td><code>업적25</code></td><td>데이터 선택: JSON 구문 분석 1 → data → <code>performance_N</code></td></tr>
-            <tr><td>9</td><td><code>역량23</code></td><td>데이터 선택: JSON 구문 분석 1 → data → <code>competency_N2</code></td></tr>
-            <tr><td>10</td><td><code>역량24</code></td><td>데이터 선택: JSON 구문 분석 1 → data → <code>competency_N1</code></td></tr>
-            <tr><td>11</td><td><code>역량25</code></td><td>데이터 선택: JSON 구문 분석 1 → data → <code>competency_N</code></td></tr>
-            <tr><td>12</td><td><code>코멘트23</code></td><td>데이터 선택: JSON 구문 분석 1 → data → <code>supervisorReview_N2</code></td></tr>
-            <tr><td>13</td><td><code>코멘트24</code></td><td>데이터 선택: JSON 구문 분석 1 → data → <code>supervisorReview_N1</code></td></tr>
-            <tr><td>14</td><td><code>코멘트25</code></td><td>데이터 선택: JSON 구문 분석 1 → data → <code>supervisorReview_N</code></td></tr>
-            <tr><td>15</td><td><code>동료23</code></td><td>데이터 선택: JSON 구문 분석 1 → data → <code>peerScore_N2</code></td></tr>
-            <tr><td>16</td><td><code>동료24</code></td><td>데이터 선택: JSON 구문 분석 1 → data → <code>peerScore_N1</code></td></tr>
-            <tr><td>17</td><td><code>동료25</code></td><td>데이터 선택: JSON 구문 분석 1 → data → <code>peerScore_N</code></td></tr>
-            <tr><td>18</td><td><code>동료코멘트</code></td><td>데이터 선택: JSON 구문 분석 1 → data → <code>peerComment_N</code></td></tr>
-            <tr><td>19</td><td><code>부하23</code></td><td>데이터 선택: JSON 구문 분석 1 → data → <code>subordinateScore_N2</code></td></tr>
-            <tr><td>20</td><td><code>부하24</code></td><td>데이터 선택: JSON 구문 분석 1 → data → <code>subordinateScore_N1</code></td></tr>
-            <tr><td>21</td><td><code>부하25</code></td><td>데이터 선택: JSON 구문 분석 1 → data → <code>subordinateScore_N</code></td></tr>
-            <tr><td>22</td><td><code>부하코멘트</code></td><td>데이터 선택: JSON 구문 분석 1 → data → <code>subordinateComment_N</code></td></tr>
+            <tr><td>4</td><td><code>학력</code></td><td>데이터 선택: JSON 구문 분석 → <code>Body educationSummary</code></td></tr>
+            <tr><td>5</td><td><code>주요경력</code></td><td>데이터 선택: JSON 구문 분석 → <code>Body careerSummary</code></td></tr>
+            <tr><td>6</td><td><code>업적23</code></td><td>데이터 선택: JSON 구문 분석 1 → <code>Body performance_N2</code></td></tr>
+            <tr><td>7</td><td><code>업적24</code></td><td>데이터 선택: JSON 구문 분석 1 → <code>Body performance_N1</code></td></tr>
+            <tr><td>8</td><td><code>업적25</code></td><td>데이터 선택: JSON 구문 분석 1 → <code>Body performance_N</code></td></tr>
+            <tr><td>9</td><td><code>역량23</code></td><td>데이터 선택: JSON 구문 분석 1 → <code>Body competency_N2</code></td></tr>
+            <tr><td>10</td><td><code>역량24</code></td><td>데이터 선택: JSON 구문 분석 1 → <code>Body competency_N1</code></td></tr>
+            <tr><td>11</td><td><code>역량25</code></td><td>데이터 선택: JSON 구문 분석 1 → <code>Body competency_N</code></td></tr>
+            <tr><td>12</td><td><code>코멘트23</code></td><td>데이터 선택: JSON 구문 분석 1 → <code>Body supervisorReview_N2</code></td></tr>
+            <tr><td>13</td><td><code>코멘트24</code></td><td>데이터 선택: JSON 구문 분석 1 → <code>Body supervisorReview_N1</code></td></tr>
+            <tr><td>14</td><td><code>코멘트25</code></td><td>데이터 선택: JSON 구문 분석 1 → <code>Body supervisorReview_N</code></td></tr>
+            <tr><td>15</td><td><code>동료23</code></td><td>데이터 선택: JSON 구문 분석 1 → <code>Body peerScore_N2</code></td></tr>
+            <tr><td>16</td><td><code>동료24</code></td><td>데이터 선택: JSON 구문 분석 1 → <code>Body peerScore_N1</code></td></tr>
+            <tr><td>17</td><td><code>동료25</code></td><td>데이터 선택: JSON 구문 분석 1 → <code>Body peerScore_N</code></td></tr>
+            <tr><td>18</td><td><code>동료코멘트</code></td><td>데이터 선택: JSON 구문 분석 1 → <code>Body peerComment_N</code></td></tr>
+            <tr><td>19</td><td><code>부하23</code></td><td>데이터 선택: JSON 구문 분석 1 → <code>Body subordinateScore_N2</code></td></tr>
+            <tr><td>20</td><td><code>부하24</code></td><td>데이터 선택: JSON 구문 분석 1 → <code>Body subordinateScore_N1</code></td></tr>
+            <tr><td>21</td><td><code>부하25</code></td><td>데이터 선택: JSON 구문 분석 1 → <code>Body subordinateScore_N</code></td></tr>
+            <tr><td>22</td><td><code>부하코멘트</code></td><td>데이터 선택: JSON 구문 분석 1 → <code>Body subordinateComment_N</code></td></tr>
             <tr><td>23</td><td><code>주요역량_직무전문성</code></td><td>데이터 선택: 변수 → <code>주요역량</code></td></tr>
             <tr><td>24</td><td><code>상위역할_준비도</code></td><td>데이터 선택: 변수 → <code>상위역할</code></td></tr>
             <tr><td>25</td><td><code>종합의견</code></td><td>데이터 선택: 변수 → <code>종합의견</code></td></tr>
