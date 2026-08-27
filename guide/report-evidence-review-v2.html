@@ -1,0 +1,1468 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>A본부 조직문화 진단 리포트 (초안)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    color-scheme:light;
+    --bg:#FAFAFC; --surface:#FFFFFF; --ink:#202325; --ink-2:#56657E; --ink-3:#94A3B8;
+    --line:#EEEFF3; --line-2:#F3F4F8;
+    --series-1:#5865FA; --series-2:#FF9A51; --series-3:#16BAB1;
+    --pos:#5F9EEF; --neg:#FF6157; --mid:#D1D5DD;
+    --accent:#5865FA; --accent-weak:#EDEEFF; --accent-faint:#F6F7FF;
+    --good:#198155; --warn:#A05E03;
+    --sh-1:0px 2px 4px 0px rgba(29,27,57,.08);
+    --sh-2:0px 4px 12px 0px rgba(29,27,57,.06);
+    --sh-brand:0px 2px 4px 0px rgba(88,101,250,.15);
+    --num:'DM Sans','Noto Sans',sans-serif;
+    --mono:'DM Sans','Noto Sans',monospace;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  html,body{background:var(--bg)}
+  body{margin:0;color:var(--ink);
+       font:15px/1.8 'Noto Sans',-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Malgun Gothic',sans-serif;
+       letter-spacing:-0.2px;-webkit-font-smoothing:antialiased}
+  body.lock{overflow:hidden}
+  a{color:var(--accent);text-decoration:none}
+  a:hover{color:#2525CF}
+  .doc{max-width:920px;margin:28px auto 60px;padding:44px 52px 90px;background:var(--surface);
+       border:1px solid var(--line);border-radius:16px;box-shadow:var(--sh-1)}
+  @media(max-width:960px){.doc{margin:0;border-radius:0;border-left:0;border-right:0}}
+  @media(max-width:720px){.doc{padding:24px 20px 60px}}
+
+  /* ─ 상단 네비 ─ */
+  .topnav{position:sticky;top:0;z-index:60;background:rgba(255,255,255,.96);
+          border-bottom:1px solid var(--line);margin:-44px -52px 34px;padding:12px 44px;
+          display:flex;gap:4px;flex-wrap:wrap;backdrop-filter:blur(6px);border-radius:16px 16px 0 0}
+  @media(max-width:720px){.topnav{margin:-24px -20px 24px;padding:10px 14px;border-radius:0}}
+  .topnav a{font-size:12.5px;font-weight:700;color:var(--ink-2);text-decoration:none;
+            padding:5px 12px;border-radius:9999px;white-space:nowrap}
+  .topnav a:hover{background:var(--accent-weak);color:var(--accent)}
+  h2{scroll-margin-top:66px}
+
+  .head{margin-bottom:38px}
+  .eyebrow{font-size:11.5px;font-weight:700;letter-spacing:.14em;color:var(--accent);text-transform:uppercase;
+           font-family:var(--num)}
+  h1{font-size:29px;line-height:1.3;margin:10px 0 12px;letter-spacing:-.3px;font-weight:700}
+  .meta{font-size:13px;color:var(--ink-2);display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+  .meta i{color:var(--line);font-style:normal}
+  .state{font-size:11.5px;font-weight:700;color:var(--warn);border:0;
+         border-radius:4px;padding:3px 8px;background:rgba(255,154,81,.12)}
+  .howto{margin-top:14px;font-size:12.5px;color:var(--ink-3);line-height:1.7}
+  .howto b{color:var(--ink-2)}
+
+  h2{font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);
+     margin:56px 0 0;padding-bottom:9px;border-bottom:1px solid var(--line);font-family:var(--num)}
+  h2+p,h2+.lead,h2+figure,h2+table,h2+.stats,h2+.issues{margin-top:20px}
+  h3{font-size:17px;margin:36px 0 10px;letter-spacing:-.3px;font-weight:700}
+  h4{font-size:14.5px;margin:28px 0 8px;font-weight:700;letter-spacing:-.3px}
+  p{margin:0 0 15px}
+  .lead{color:var(--ink-2);font-size:13.5px;line-height:1.75;margin:0 0 20px}
+  .note{color:var(--ink-3);font-size:12.5px;line-height:1.7;margin:10px 0 0}
+
+  .cl{border-bottom:1px solid #D9DCFF;cursor:pointer;transition:background .1s}
+  .cl:hover{background:var(--accent-weak)}
+  .cl.seen{background:var(--accent-faint)}
+  .cl sup{font-size:9.5px;font-weight:700;color:var(--accent);margin-left:1px;vertical-align:super;font-family:var(--num)}
+
+  /* ─ 한눈에 보기 ─ */
+  .stats{display:grid;grid-template-columns:repeat(5,1fr);margin:22px 0 6px}
+  @media(max-width:720px){.stats{grid-template-columns:repeat(2,1fr);gap:16px 0}}
+  .stat{padding:0 18px;border-left:1px solid var(--line)}
+  .stat:first-child{padding-left:0;border-left:0}
+  .stat .k{font-size:11.5px;color:var(--ink-3);line-height:1.5}
+  .stat .v{font-size:26px;font-weight:700;letter-spacing:-.02em;line-height:1.35;font-family:var(--num)}
+  .stat .v small{font-size:12px;font-weight:500;color:var(--ink-3);margin-left:2px;letter-spacing:0}
+  .stat .d{font-size:11.5px;color:var(--ink-3)}
+  .up{color:var(--neg)}.dn{color:var(--good)}
+  .respline{font-size:12.5px;color:var(--ink-3);margin:8px 0 0}
+
+  .issues{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:24px}
+  @media(max-width:720px){.issues{grid-template-columns:1fr}}
+  .iss{text-align:left;border:1px solid var(--line);border-radius:12px;background:var(--surface);
+       padding:16px 18px 15px;cursor:pointer;font:inherit;letter-spacing:-0.2px;position:relative;width:100%;
+       box-shadow:var(--sh-1);transition:border-color .12s,box-shadow .12s}
+  .iss:hover{border-color:var(--accent);box-shadow:var(--sh-brand)}
+  .iss .chip{display:inline-block;font-size:10.5px;font-weight:700;letter-spacing:0;
+             padding:3px 8px;border-radius:4px}
+  .iss.warn .chip{background:rgba(255,97,87,.1);color:#D3180C}
+  .iss.info .chip{background:rgba(255,154,81,.14);color:#A05E03}
+  .iss.good .chip{background:rgba(22,186,177,.1);color:#007872}
+  .iss .it{font-size:14.5px;font-weight:700;margin:9px 0 3px;letter-spacing:-.3px;color:var(--ink)}
+  .iss .in{font-size:23px;font-weight:700;letter-spacing:-.02em;color:var(--ink);font-family:var(--num)}
+  .iss .in small{font-size:11.5px;font-weight:400;color:var(--ink-3);margin-left:5px;letter-spacing:-0.2px;
+                 font-family:'Noto Sans',sans-serif}
+  .iss .id2{font-size:12px;color:var(--ink-2);line-height:1.65;margin-top:5px}
+  .iss .go{position:absolute;right:16px;top:16px;font-size:11px;color:var(--accent);font-weight:700}
+
+  /* ─ 차트·표 ─ */
+  figure{margin:26px 0 10px}
+  .fig-t{font-size:13px;font-weight:700;margin-bottom:1px}
+  .fig-s{font-size:11.5px;color:var(--ink-3);margin-bottom:14px}
+  .viz{width:100%;height:auto;display:block;overflow:visible}
+  .legend{display:flex;gap:16px;flex-wrap:wrap;font-size:11.5px;color:var(--ink-2);margin:0 0 12px}
+  .legend i{width:9px;height:9px;border-radius:3px;display:inline-block;margin-right:6px}
+  .legend .tick{display:inline-block;width:2px;height:11px;background:var(--ink-3);
+                margin-right:6px;vertical-align:-2px}
+  figcaption{font-size:12px;color:var(--ink-3);margin-top:10px;line-height:1.65}
+  details.tv{margin-top:10px}
+  details.tv summary{font-size:11.5px;color:var(--ink-3);cursor:pointer;list-style:none;display:inline-block}
+  details.tv summary::-webkit-details-marker{display:none}
+  details.tv summary::before{content:'＋ '}
+  details.tv[open] summary::before{content:'－ '}
+
+  table{width:100%;border-collapse:collapse;font-size:13.5px;margin:6px 0}
+  th,td{text-align:left;padding:9px 0;border-bottom:1px solid var(--line-2);vertical-align:top}
+  th+th,td+td{padding-left:18px}
+  th{font-size:11px;color:var(--ink-3);font-weight:700;letter-spacing:.07em;text-transform:uppercase;
+     border-bottom:1px solid var(--line);padding-bottom:7px;font-family:var(--num)}
+  td.n,th.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+  .mini{display:flex;gap:1px;height:7px;border-radius:4px;overflow:hidden;min-width:90px;margin-top:5px}
+  tr.qrow{cursor:pointer}
+  tr.qrow:hover{background:var(--accent-faint)}
+  tr.qrow:hover td:first-child{color:var(--accent)}
+  tr.qrow td:first-child::before{content:'›';color:var(--ink-3);margin-right:7px;font-weight:700;opacity:.5}
+  tr.qrow:hover td:first-child::before{color:var(--accent);opacity:1}
+  .qnum{color:var(--ink-3);font-variant-numeric:tabular-nums;font-size:12px;margin-right:7px;font-family:var(--num)}
+  .arealab{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+           color:var(--accent);padding-top:16px}
+
+  .fold{border:1px solid var(--line);border-radius:12px;margin:16px 0;background:var(--surface)}
+  .fold>summary{cursor:pointer;padding:13px 16px;font-size:13px;font-weight:700;
+                color:var(--ink-2);list-style:none}
+  .fold>summary::-webkit-details-marker{display:none}
+  .fold>summary::before{content:'＋ ';color:var(--ink-3)}
+  .fold[open]>summary::before{content:'－ '}
+  .fold>.inner{padding:2px 16px 14px}
+
+  blockquote{margin:14px 0;padding:12px 16px;border-left:0;background:var(--bg);border-radius:8px;
+             font-size:14px;color:var(--ink-2);line-height:1.75}
+  blockquote cite{display:block;margin-top:6px;font-size:11.5px;color:var(--ink-3);font-style:normal}
+  .tag{font-size:10.5px;font-weight:700;color:var(--ink-2);border:0;background:var(--line-2);
+       border-radius:4px;padding:2px 8px;white-space:nowrap}
+  .tag.rule{color:var(--accent);background:var(--accent-weak)}
+  .tag.llm{color:#A05E03;background:rgba(255,154,81,.14)}
+  .human{border-left:2px solid var(--ink-3);padding:2px 0 2px 18px;margin:16px 0;color:var(--ink-2);
+         font-size:13.5px;line-height:1.75}
+  .human b{display:block;font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;
+           color:var(--ink-3);margin-bottom:4px;font-weight:700}
+  .mono{font-family:var(--num);font-size:11px;color:var(--ink-3)}
+  .pass{color:var(--good);font-weight:700}
+
+  /* ═══ 팝업 ═══ */
+  .scrim{position:fixed;inset:0;background:rgba(0,0,0,.5);opacity:0;pointer-events:none;
+         transition:opacity .16s;z-index:80}
+  .scrim.on{opacity:1;pointer-events:auto}
+  .modal{position:fixed;z-index:81;left:50%;top:50%;transform:translate(-50%,-48%) scale(.985);
+         width:min(1180px,calc(100vw - 40px));height:min(780px,calc(100vh - 56px));
+         background:var(--surface);border-radius:16px;box-shadow:0px 4px 12px 0px rgba(29,27,57,.06),0 20px 60px rgba(29,27,57,.22);
+         opacity:0;pointer-events:none;transition:opacity .16s,transform .16s;
+         display:grid;grid-template-columns:minmax(0,430px) minmax(0,1fr);overflow:hidden}
+  .modal.on{opacity:1;pointer-events:auto;transform:translate(-50%,-50%) scale(1)}
+  @media(max-width:900px){.modal{grid-template-columns:1fr;grid-template-rows:auto 1fr;
+    width:calc(100vw - 20px);height:calc(100vh - 20px)}}
+  .m-left{border-right:1px solid var(--line);overflow:auto;padding:24px 26px 30px}
+  .m-right{overflow:auto;background:var(--bg);display:flex;flex-direction:column}
+  @media(max-width:900px){.m-left{border-right:0;border-bottom:1px solid var(--line)}}
+  .m-left::-webkit-scrollbar,.m-right::-webkit-scrollbar,.list-body::-webkit-scrollbar{width:7px}
+  .m-left::-webkit-scrollbar-thumb,.m-right::-webkit-scrollbar-thumb,
+  .list-body::-webkit-scrollbar-thumb{background:var(--line);border-radius:9999px}
+  .m-close{position:absolute;right:12px;top:10px;z-index:3;border:0;background:var(--surface);
+           font-size:18px;line-height:1;color:var(--ink-3);cursor:pointer;padding:6px 10px;border-radius:8px}
+  .m-close:hover{background:var(--line-2);color:var(--ink)}
+
+  .m-eyebrow{font-size:11px;font-weight:700;letter-spacing:.12em;color:var(--accent);
+             text-transform:uppercase;margin-bottom:8px;font-family:var(--num)}
+  .m-claim{font-size:17px;font-weight:700;line-height:1.5;letter-spacing:-.3px;margin-bottom:18px}
+  .m-sec{font-size:13px;font-weight:700;margin:24px 0 10px}
+  .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);
+         border:1px solid var(--line);border-radius:12px;overflow:hidden}
+  .card{background:var(--surface);padding:11px 12px}
+  .card .ck{font-size:11px;color:var(--ink-3);line-height:1.45}
+  .card .cv{font-size:19px;font-weight:700;letter-spacing:-.02em;line-height:1.4;font-family:var(--num)}
+  .card .cv small{font-size:11px;font-weight:400;color:var(--ink-3);letter-spacing:-0.2px;
+                  font-family:'Noto Sans',sans-serif}
+
+  .steps{counter-reset:s;margin:0;padding:0;list-style:none}
+  .steps li{counter-increment:s;position:relative;padding:0 0 14px 30px;font-size:13.5px;line-height:1.7;
+            color:var(--ink-2)}
+  .steps li::before{content:counter(s);position:absolute;left:0;top:2px;width:19px;height:19px;
+    border-radius:9999px;background:var(--accent-weak);color:var(--accent);font-size:11px;font-weight:700;
+    display:flex;align-items:center;justify-content:center;font-family:var(--num)}
+  .steps li b{color:var(--ink)}
+  .checks{margin:0;padding:0;list-style:none}
+  .checks li{display:flex;gap:9px;align-items:flex-start;font-size:13px;padding:5px 0;color:var(--ink-2)}
+  .checks li span.ok{color:var(--good);font-weight:700;flex:none}
+  .checks li span.no{color:var(--warn);font-weight:700;flex:none}
+
+  .drill{display:flex;justify-content:space-between;gap:10px;align-items:center;width:100%;
+         text-align:left;border:1px solid var(--line);border-radius:8px;background:var(--surface);
+         padding:10px 12px;margin:0 0 6px;cursor:pointer;font:inherit;letter-spacing:-0.2px;font-size:13px;color:var(--ink)}
+  .drill:hover{border-color:var(--accent);background:var(--accent-faint)}
+  .drill.on{border-color:var(--accent);background:var(--accent-weak)}
+  .drill .dv{font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap;font-family:var(--num)}
+  .drill::after{content:'›';color:var(--ink-3);font-size:15px;margin-left:2px}
+  .drill.on::after{color:var(--accent)}
+  .drill.big{background:var(--accent);border-color:var(--accent);color:#fff;margin-top:4px;
+             box-shadow:var(--sh-brand);
+             font:700 13px/1.6 'Noto Sans',sans-serif;letter-spacing:-0.2px}
+  .drill.big:hover{opacity:.9;background:var(--accent)}
+  .drill.big::after{color:rgba(255,255,255,.7)}
+  .tech{margin-top:22px;border-top:1px solid var(--line-2);padding-top:6px}
+  .tech summary{font-size:11.5px;color:var(--ink-3);cursor:pointer;list-style:none;padding:6px 0}
+  .tech summary::-webkit-details-marker{display:none}
+  .tech summary::before{content:'＋ '}
+  .tech[open] summary::before{content:'－ '}
+  .tech .kv{display:flex;justify-content:space-between;gap:10px;font-size:11.5px;padding:3px 0;
+            font-family:var(--num);color:var(--ink-3)}
+
+  .rp-pad{padding:24px 26px 30px}
+  .rp-empty{color:var(--ink-3);font-size:13px;line-height:1.85}
+  .rp-t{font-size:16px;font-weight:700;letter-spacing:-.3px;line-height:1.45}
+  .rp-cond{font-size:12px;color:var(--ink-3);margin:6px 0 18px;line-height:1.65}
+  .big{font-size:36px;font-weight:700;letter-spacing:-.02em;line-height:1.15;font-family:var(--num)}
+  .big small{font-size:13px;font-weight:400;color:var(--ink-3);margin-left:5px;letter-spacing:-0.2px;
+             font-family:'Noto Sans',sans-serif}
+  .rp-sub{font-size:12px;font-weight:700;color:var(--ink-2);margin:24px 0 8px}
+  .drow{display:grid;grid-template-columns:132px 1fr 108px;align-items:center;gap:10px;
+        font-size:13px;padding:4px 0}
+  .drow .dk{color:var(--ink-2)}
+  .drow .db{height:13px;background:var(--line-2);border-radius:4px;overflow:hidden}
+  .drow .db i{display:block;height:100%;background:var(--series-1);border-radius:4px}
+  .drow .dn{text-align:right;font-variant-numeric:tabular-nums;color:var(--ink-2)}
+  .drow .dn b{color:var(--ink)}
+  .rerun{display:flex;gap:9px;margin-top:18px;padding:11px 13px;border:1px solid var(--line);
+         border-radius:8px;background:var(--surface);font-size:12.5px;color:var(--ink-2)}
+  .rerun b{color:var(--good)}
+  .btn{border:1px solid var(--line);background:var(--surface);border-radius:8px;padding:7px 12px;
+       font-size:12px;font-weight:700;cursor:pointer;color:var(--ink-2);font-family:inherit;letter-spacing:-0.2px}
+  .btn:hover{border-color:var(--accent);color:var(--accent)}
+  .btnrow{display:flex;gap:7px;flex-wrap:wrap;margin-top:18px}
+
+  .list-head{padding:20px 26px 14px;border-bottom:1px solid var(--line);background:var(--surface);flex:none}
+  .list-title{font-size:16px;font-weight:700;letter-spacing:-.3px}
+  .list-sub{font-size:12px;color:var(--ink-3);margin-top:4px;line-height:1.6}
+  .tools{display:flex;gap:8px;flex-wrap:wrap;margin-top:13px;align-items:center}
+  .search{flex:1 1 180px;min-width:140px;border:1px solid #D1D5DD;border-radius:8px;
+          padding:7px 11px;font:inherit;letter-spacing:-0.2px;font-size:13px;color:var(--ink);background:var(--surface)}
+  .search:focus{outline:2px solid var(--accent-weak);border-color:var(--accent)}
+  .chip{border:1px solid var(--line);background:var(--surface);border-radius:9999px;padding:5px 12px;
+        font-size:12px;font-weight:700;color:var(--ink-2);cursor:pointer;font-family:inherit;letter-spacing:-0.2px}
+  .chip:hover{border-color:var(--accent);color:var(--accent)}
+  .chip.on{background:var(--accent);border-color:var(--accent);color:#fff}
+  .list-count{font-size:12px;color:var(--ink-3);margin-top:11px}
+  .list-body{overflow:auto;padding:6px 26px 26px;flex:1 1 auto}
+  .ritem{padding:13px 0;border-bottom:1px solid var(--line-2);display:grid;
+         grid-template-columns:38px 1fr;gap:12px}
+  .ritem .rno{font-size:11.5px;color:var(--ink-3);font-variant-numeric:tabular-nums;padding-top:2px;font-family:var(--num)}
+  .ritem .rtx{font-size:13.5px;line-height:1.75}
+  .ritem .rmeta{font-size:11.5px;color:var(--ink-3);margin-top:5px;display:flex;gap:7px;flex-wrap:wrap}
+  .sdot{width:7px;height:7px;border-radius:9999px;display:inline-block;margin-right:4px}
+  .rthemes{display:flex;gap:5px;flex-wrap:wrap;margin-top:7px}
+  .tchip{font-size:10.5px;font-weight:700;color:var(--ink-2);border:1px solid var(--line);
+         border-radius:9999px;padding:1.5px 9px;background:var(--surface);cursor:pointer;font-family:inherit;
+         letter-spacing:-0.2px;line-height:1.6}
+  .tchip::before{content:'#';opacity:.45;margin-right:2px}
+  .tchip:hover{border-color:var(--accent);color:var(--accent)}
+  .tchip.on{background:var(--accent);border-color:var(--accent);color:#fff}
+  .tchip.on::before{opacity:.7}
+  .dsel{border:1px solid var(--line);border-radius:8px;padding:6px 8px;font:inherit;letter-spacing:-0.2px;
+        font-size:12px;font-weight:700;color:var(--ink-2);background:var(--surface);cursor:pointer}
+  .dsel:hover{border-color:var(--accent)}
+  .dsel:has(option:checked:not([value=""])){border-color:var(--accent);color:var(--accent)}
+  .kblock{margin:26px 4px;padding:22px 18px;border:1px dashed #D1D5DD;border-radius:12px;
+          color:var(--ink-2);font-size:13px;line-height:1.85;text-align:center;background:var(--surface)}
+  .kblock b{display:block;font-size:14.5px;color:var(--ink);margin-bottom:5px}
+  .maskrow td{color:var(--ink-3);font-size:12.5px}
+  .score{display:inline-flex;align-items:center;justify-content:center;min-width:22px;height:22px;
+         border-radius:4px;font-size:12px;font-weight:700;color:#fff;font-variant-numeric:tabular-nums;
+         font-family:var(--num)}
+  .list-note{font-size:11.5px;color:var(--ink-3);line-height:1.7;padding:14px 0 4px;
+             border-top:1px solid var(--line);margin-top:10px}
+  mark,.hl{background:var(--accent-weak);border-bottom:1.5px solid #D9DCFF;color:inherit;padding:0}
+  #tip{position:fixed;pointer-events:none;opacity:0;transition:opacity .1s;z-index:90;
+       background:#202325;color:#fff;font-size:11.5px;line-height:1.55;padding:7px 10px;
+       border-radius:8px;max-width:230px;box-shadow:var(--sh-2)}
+</style>
+</head>
+<body>
+<div id="tip"></div>
+
+<main class="doc">
+  <nav class="topnav">
+    <a href="#s1">한눈에 보기</a><a href="#s2">핵심 진단</a><a href="#s3">객관식</a>
+    <a href="#s4">주관식</a><a href="#s5">작년과 비교</a><a href="#s6">권장 조치</a><a href="#s7">부록</a>
+  </nav>
+
+  <div class="head">
+    <div class="eyebrow">Culture Survey · 2026년 상반기</div>
+    <h1>A본부 조직문화 진단 리포트</h1>
+    <div class="meta">
+      <span class="state">초안 · 검수 기간 3일 남음</span><i>·</i>
+      <span>대상 1,000명 · 응답 862명</span><i>·</i>
+      <span>2026-06-01 ~ 06-14</span>
+    </div>
+    <div class="howto"><b>밑줄 친 문장 · 카드 · 문항 행</b>을 클릭하면 “왜 이렇게 판단했는지”와 실제 응답 전체를 확인할 수 있습니다.</div>
+  </div>
+
+  <!-- 1 한눈에 보기 -->
+  <h2 id="s1">1 · 한눈에 보기</h2>
+  <div class="stats">
+    <div class="stat"><div class="k">응답률</div><div class="v">86.2<small>%</small></div><div class="d dn">▲ 3.4%p</div></div>
+    <div class="stat"><div class="k">객관식 종합</div><div class="v" id="k-all">–</div><div class="d up">▼ 0.05</div></div>
+    <div class="stat"><div class="k">자유 응답</div><div class="v">3,862<small>건</small></div><div class="d">1인 4.5건</div></div>
+    <div class="stat"><div class="k">주제 수</div><div class="v">24<small>개</small></div><div class="d">신규 2 · 사라짐 1</div></div>
+    <div class="stat"><div class="k">부정적 의견</div><div class="v">58<small>%</small></div><div class="d up">▲ 6.1%p</div></div>
+  </div>
+  <p class="respline">객관식 39문항 · 주관식 10문항 · 자유 응답 3,862건을 분석했습니다. 자세한 응답 현황은 부록에 있습니다.</p>
+
+  <div class="issues">
+    <button class="iss warn" data-ev="i1">
+      <span class="chip">주의 · 악화</span><span class="go">근거 보기 ›</span>
+      <div class="it">부서 간 협업 우려가 크게 늘었습니다</div>
+      <div class="in">36.2%<small>언급 · 작년 22.0%</small></div>
+      <div class="id2">862명 중 312명이 언급 · 부정 의견 71% · 객관식 소통 점수 하락과 같은 방향</div>
+    </button>
+    <button class="iss warn" data-ev="i5">
+      <span class="chip">주의 · 악화</span><span class="go">근거 보기 ›</span>
+      <div class="it">소통·논의 점수만 유일하게 하락했습니다</div>
+      <div class="in">3.38<small>점 · 작년 3.63</small></div>
+      <div class="id2">영역 내 6개 문항이 모두 하락 · “골고루 발언” 문항이 3.21점으로 최저</div>
+    </button>
+    <button class="iss info" data-ev="i2">
+      <span class="chip">해석 주의</span><span class="go">근거 보기 ›</span>
+      <div class="it">성장 지원 언급은 줄었지만, 개선은 아닙니다</div>
+      <div class="in">28.8%<small>언급 · 작년 33.1%</small></div>
+      <div class="id2">언급은 줄었는데 객관식 점수는 오히려 하락 — 두 결과의 방향이 달라 신뢰도를 낮춤</div>
+    </button>
+    <button class="iss info" data-ev="i3">
+      <span class="chip">참고 · 새 신호</span><span class="go">근거 보기 ›</span>
+      <div class="it">회의·보고 준비 부담이 처음 등장했습니다</div>
+      <div class="in">97<small>명 언급 · 11.3%</small></div>
+      <div class="id2">정식 기준(100명)에 3명 미달 — 참고용으로만 표시, 다음 회차 확인 필요</div>
+    </button>
+    <button class="iss good" data-ev="i4" style="grid-column:1/-1">
+      <span class="chip">강점 · 유지</span><span class="go">근거 보기 ›</span>
+      <div class="it">팀 안에서 서로 돕는 문화는 여전히 강점입니다</div>
+      <div class="in">31.1%<small>강점으로 언급 · 긍정 77%</small></div>
+      <div class="id2">협업 문제는 부서와 부서 <b>사이</b>에 몰려 있고, 팀 안쪽 결속은 유지 — 개선 범위를 좁힐 수 있습니다</div>
+    </button>
+  </div>
+
+  <!-- 2 핵심 진단 -->
+  <h2 id="s2">2 · 핵심 진단</h2>
+
+  <h3>① 부서 간 협업 — 올해 가장 뚜렷한 악화 신호 <span class="tag rule">정해진 기준으로 판단</span></h3>
+  <p>자유 응답에서 <span class="cl" data-ev="i1">862명 중 312명(36.2%)이 협업 문제를 언급해 작년(22.0%)보다 14.2%p 늘었습니다<sup>[1]</sup></span>.
+     내용은 셋으로 나뉩니다 — 어디에 요청해야 할지 모르겠다는 <strong>절차 문제</strong> 142건,
+     담당자가 없어 같은 요청을 반복한다는 <strong>담당 공백</strong> 103건, 부서마다 방식이 다르다는 <strong>기준 부재</strong> 67건.</p>
+  <blockquote>협업 프로세스가 제각각이라 어디서부터 요청해야 하는지 모르겠습니다.
+    <cite>39_문항 응답 · 팀원</cite></blockquote>
+  <p>객관식에서도 <span class="cl" data-ev="i5">소통·논의 영역 점수가 3.63점에서 3.38점으로, 6개 영역 중 유일하게 의미 있는 하락<sup>[5]</sup></span>을 보였습니다.
+     서로 다른 두 방식이 같은 방향을 가리켜 판단의 신뢰도가 높습니다.
+     다만 반대 의견도 9% 있습니다 — “작년보다는 창구가 정리된 편”. 제도는 정비됐지만 현장 체감에 이르지 못한 상태로 보입니다.</p>
+  <div class="human">
+    <b>담당자 홍길동이 덧붙인 설명 · 설문 데이터에는 없는 내용</b>
+    이 기간에 A본부는 2개 팀을 통합하는 조직 개편을 진행했습니다. 협업 관련 언급 증가에는 이 변화도 영향을 주었을 수 있습니다.
+  </div>
+
+  <h3>② 성장·역량 개발 — 언급은 줄었지만 개선으로 보기 어렵습니다 <span class="tag rule">정해진 기준으로 판단</span></h3>
+  <p><span class="cl" data-ev="i2">언급률 28.8%로 작년보다 4.3%p 줄었습니다<sup>[2]</sup></span>.
+     그러나 객관식 성장·보상 점수는 3.55점에서 3.51점으로 오히려 내려가 두 결과의 방향이 다릅니다.
+     교육 시간·예산 요청은 여전히 많습니다(151건).</p>
+  <blockquote>교육을 신청해도 업무 일정 때문에 참석하지 못하는 경우가 반복됩니다.
+    <cite>28_문항 응답 · 팀원</cite></blockquote>
+
+  <h3>③ 회의·보고 준비 부담 — 올해 처음 나온 참고 신호 <span class="tag llm">참고용 · AI가 찾은 주제</span></h3>
+  <p><span class="cl" data-ev="i3">97명(11.3%)이 언급한 새 주제입니다<sup>[3]</sup></span>.
+     정식 판단 기준(100명 이상)에 3명 모자라 참고용으로만 싣습니다. 다음 회차에도 이어지는지 확인이 필요합니다.</p>
+
+  <h3>④ 강점 — 팀 안에서 서로 돕는 문화</h3>
+  <p><span class="cl" data-ev="i4">862명 중 268명(31.1%)이 강점으로 꼽았고 긍정 의견이 77%<sup>[4]</sup></span>로 가장 높습니다.
+     객관식 실행·책임 영역(4.05점)과도 일치합니다. 협업 문제가 부서 <strong>사이</strong>에 몰려 있다는 점과 함께 보면,
+     개선 과제의 범위를 좁힐 수 있습니다.</p>
+
+  <!-- 3 객관식 -->
+  <h2 id="s3">3 · 객관식 결과</h2>
+  <p class="lead">5점 척도 31문항을 내용에 따라 6개 영역으로 묶었습니다. 문항 행을 클릭하면 그 문항의 응답 862건을 볼 수 있습니다.</p>
+
+  <figure>
+    <div class="fig-t">그림 1. 영역별 평균 점수</div>
+    <div class="fig-s">5점 만점 · 응답 862명 · 세로 눈금은 작년 점수</div>
+    <div class="legend"><span><i style="background:var(--series-1)"></i>올해</span><span><span class="tick"></span>작년</span></div>
+    <svg id="c1" class="viz" role="img" aria-label="영역별 평균 점수"></svg>
+    <details class="tv"><summary>표로 보기</summary><div id="c1t"></div></details>
+  </figure>
+
+  <figure>
+    <div class="fig-t">그림 2. 영역별 응답 분포</div>
+    <div class="fig-s">긍정(4~5점) · 보통(3점) · 부정(1~2점) · 단위 %</div>
+    <div class="legend">
+      <span><i style="background:var(--pos)"></i>긍정</span>
+      <span><i style="background:var(--mid)"></i>보통</span>
+      <span><i style="background:var(--neg)"></i>부정</span>
+    </div>
+    <svg id="c2" class="viz" role="img" aria-label="영역별 응답 분포"></svg>
+    <details class="tv"><summary>표로 보기</summary><div id="c2t"></div></details>
+    <figcaption>소통·논의 영역의 부정 응답이 <span id="cap-neg">–</span>로 6개 영역 중 가장 높습니다.</figcaption>
+  </figure>
+
+  <h4>점수가 가장 낮은 5개 문항</h4>
+  <table>
+    <thead><tr><th>문항</th><th>영역</th><th class="n">올해</th><th class="n">작년</th><th class="n">변화</th></tr></thead>
+    <tbody id="low5"></tbody>
+  </table>
+  <p class="note" id="low5note">–</p>
+
+  <details class="fold">
+    <summary>31문항 전체 결과 펼치기 — 각 행을 클릭하면 응답 862건을 볼 수 있습니다</summary>
+    <div class="inner">
+      <table>
+        <thead><tr><th>문항</th><th class="n">올해</th><th class="n">작년</th><th class="n">변화</th><th>응답 분포</th></tr></thead>
+        <tbody id="q5tab"></tbody>
+      </table>
+    </div>
+  </details>
+
+  <h4>하나만 고르는 문항</h4>
+  <table>
+    <thead><tr><th>문항</th><th>응답 분포</th><th class="n">긍정</th></tr></thead>
+    <tbody>
+      <tr><td>우리 조직이 최고 수준의 팀이라고 자부한다</td>
+          <td>매우 12% · 그렇다 38% · 보통 34% · 아니다 12% · 전혀 4%</td><td class="n">50.0%</td></tr>
+    </tbody>
+  </table>
+  <p class="note">나머지 7문항은 성별·연령대·근속 등 응답자 구성 항목이라 리포트에는 싣지 않습니다.
+     인원이 5명 미만인 집단은 개인이 드러날 수 있어 어떤 화면에서도 표시하지 않습니다.</p>
+
+  <!-- 4 주관식 -->
+  <h2 id="s4">4 · 주관식 결과</h2>
+  <p class="lead">자유롭게 쓴 응답을 의미 단위로 나눠 비슷한 내용끼리 묶었더니 24개 주제가 나왔습니다.</p>
+
+  <figure>
+    <div class="fig-t">그림 3. 많이 언급된 주제 8개</div>
+    <div class="fig-s">응답자 862명 중 몇 %가 언급했나 · 한 사람이 여러 주제를 말할 수 있음</div>
+    <svg id="c3" class="viz" role="img" aria-label="주제별 언급률"></svg>
+    <details class="tv"><summary>표로 보기</summary><div id="c3t"></div></details>
+  </figure>
+
+  <h4>주제별 상세</h4>
+  <table>
+    <thead><tr><th>주제</th><th class="n">인원</th><th class="n">언급률</th><th class="n">작년 대비</th><th>의견 성격</th></tr></thead>
+    <tbody id="ttab"></tbody>
+  </table>
+  <p class="note">의견 성격 — <span style="color:var(--pos)">긍정</span> · <span style="color:var(--ink-3)">보통</span> · <span style="color:var(--neg)">부정</span></p>
+
+  <h4>문항별 결과 · 10문항</h4>
+  <p class="lead">각 행을 클릭하면 그 문항에 달린 <strong>응답 전체</strong>와 어떤 주제가 나왔는지 볼 수 있습니다.</p>
+  <table>
+    <thead><tr><th style="width:42%">문항</th><th class="n" style="width:52px">응답</th>
+      <th class="n" style="width:60px">응답률</th><th>이 문항에서 많이 나온 주제</th></tr></thead>
+    <tbody id="qttab"></tbody>
+  </table>
+
+  <!-- 5 작년과 비교 -->
+  <h2 id="s5">5 · 작년과 비교</h2>
+  <p class="lead">작년과 같은 기준으로 주제를 맞춰 비교했습니다. 같은 주제로 보기 어려운 경우는 비교에서 뺐습니다.</p>
+
+  <figure>
+    <div class="fig-t">그림 4. 주제별 언급률 변화</div>
+    <div class="fig-s">작년 하반기 → 올해 상반기 · 단위 %p</div>
+    <div class="legend">
+      <span><i style="background:var(--neg)"></i>늘어남 (우려 확산)</span>
+      <span><i style="background:var(--pos)"></i>줄어듦 (개선)</span>
+    </div>
+    <svg id="c4" class="viz" role="img" aria-label="주제별 변화"></svg>
+    <details class="tv"><summary>표로 보기</summary><div id="c4t"></div></details>
+  </figure>
+
+  <p><strong>올해 새로 등장</strong> 회의·보고 준비 부담(11.3%), 업무 도구·시스템 불편(9.7%).
+     <strong>사라짐</strong> 재택근무 운영 혼선(작년 9.6%).</p>
+
+  <figure>
+    <div class="fig-t">그림 5. 주요 주제 3개의 3개 회차 추이</div>
+    <div class="fig-s">단위 %</div>
+    <svg id="c5" class="viz" role="img" aria-label="회차별 추이"></svg>
+    <details class="tv"><summary>표로 보기</summary><div id="c5t"></div></details>
+  </figure>
+
+  <!-- 6 권장 조치 -->
+  <h2 id="s6">6 · 권장 조치</h2>
+  <p class="lead">근거가 연결되지 않은 조치는 리포트에 실을 수 없습니다. 각 항목을 클릭하면 근거를 볼 수 있습니다.</p>
+  <table>
+    <thead><tr><th class="n" style="width:40px">＃</th><th>조치</th><th>연결된 진단</th></tr></thead>
+    <tbody>
+      <tr><td class="n">1</td><td><span class="cl" data-ev="i1">부서 간 요청 창구와 담당자를 문서로 정해 공유<sup>[1]</sup></span></td><td>① 협업</td></tr>
+      <tr><td class="n">2</td><td><span class="cl" data-ev="i5">회의 운영 방식 재정비 — 발언 기회 균등, 이견 공유 절차<sup>[5]</sup></span></td><td>① 소통</td></tr>
+      <tr><td class="n">3</td><td><span class="cl" data-ev="i2">교육 참석을 보장하는 업무 조정 규칙 마련<sup>[2]</sup></span></td><td>② 성장</td></tr>
+      <tr><td class="n">4</td><td><span class="cl" data-ev="i4">팀 안의 상호 지원 방식을 부서 간으로 확장<sup>[4]</sup></span></td><td>④ 강점</td></tr>
+    </tbody>
+  </table>
+
+  <!-- 7 부록 -->
+  <h2 id="s7">7 · 부록</h2>
+
+  <details class="fold">
+    <summary>응답 현황</summary>
+    <div class="inner">
+      <table>
+        <thead><tr><th>구분</th><th class="n">문항</th><th class="n">응답</th><th class="n">응답률</th></tr></thead>
+        <tbody>
+          <tr><td>객관식 · 5점 척도</td><td class="n">31</td><td class="n">862</td><td class="n">100.0%</td></tr>
+          <tr><td>객관식 · 단일 선택</td><td class="n">8</td><td class="n">862</td><td class="n">100.0%</td></tr>
+          <tr><td>주관식 · 필수 2문항</td><td class="n">2</td><td class="n">1,724</td><td class="n">100.0%</td></tr>
+          <tr><td>주관식 · 선택 8문항</td><td class="n">8</td><td class="n">2,138</td><td class="n">31.0%</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </details>
+
+  <details class="fold">
+    <summary>객관식과 주관식 대조 — 판단 신뢰도의 근거</summary>
+    <div class="inner">
+      <table>
+        <thead><tr><th>객관식에서는</th><th>주관식에서는</th><th>대조 결과</th></tr></thead>
+        <tbody>
+          <tr><td>소통·논의 점수 0.25점 하락</td><td>협업 문제 언급 14.2%p 증가</td><td><span class="pass">같은 방향</span></td></tr>
+          <tr><td>공정 보상 3.34점 (하위권)</td><td>평가·보상 언급 5.6%p 증가</td><td><span class="pass">같은 방향</span></td></tr>
+          <tr><td>실행·책임 4.05점 (최고)</td><td>서로 돕는 문화 강점 31.1%</td><td><span class="pass">같은 방향</span></td></tr>
+          <tr><td>성장·보상 0.04점 하락</td><td>성장 지원 부족 언급 4.3%p 감소</td>
+              <td><span style="color:var(--warn);font-weight:700">방향이 다름</span></td></tr>
+        </tbody>
+      </table>
+      <p class="note">방향이 다른 항목은 “개선되었다”고 단정하지 않도록 관련 문장의 신뢰도를 한 단계 낮춰 표현했습니다.</p>
+    </div>
+  </details>
+
+  <details class="fold">
+    <summary>검수 기록 — 담당자 수정 요청 3건의 처리 결과</summary>
+    <div class="inner">
+      <table>
+        <thead><tr><th>요청 내용</th><th>처리</th></tr></thead>
+        <tbody>
+          <tr><td>“‘대부분의 구성원이’는 과장이다”<br>
+              <span class="note" style="margin:2px 0 0">“대부분”은 70% 이상일 때 쓰는 표현인데 실제는 28.8%였습니다.</span></td>
+              <td><span class="pass">반영</span><br><span class="note" style="margin:0">“절반에 못 미치는 구성원이”로 수정</span></td></tr>
+          <tr><td>“312명이 아니라 300명 아닌가?”<br>
+              <span class="note" style="margin:2px 0 0">집계를 다시 돌렸더니 312명으로 같았습니다.</span></td>
+              <td>반영하지 않음<br><span class="note" style="margin:0">계산 근거를 함께 회신</span></td></tr>
+          <tr><td>“협업이 아니라 담당 구분 문제다”<br>
+              <span class="note" style="margin:2px 0 0">이 리포트만 고치면 같은 기준을 쓴 23개 조직과 어긋납니다.</span></td>
+              <td>다음 회차 반영<br><span class="note" style="margin:0">주제 이름 변경 안건으로 등록</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </details>
+
+  <details class="fold">
+    <summary>이 리포트를 만든 방법</summary>
+    <div class="inner">
+      <table>
+        <tbody>
+          <tr><td style="width:32%">분석한 것</td><td>객관식 39문항 전체, 주관식 10문항 전체 응답</td></tr>
+          <tr><td>주제를 묶은 방법</td><td>응답을 의미 단위로 나눈 뒤 비슷한 내용끼리 자동 분류 (24개 주제)</td></tr>
+          <tr><td>숫자를 낸 방법</td><td>모든 수치는 데이터베이스 집계로 산출하며, 언제든 다시 돌려 같은 값이 나오는지 확인할 수 있습니다</td></tr>
+          <tr><td>판단 기준</td><td>사람이 미리 정해 둔 기준을 통과한 것만 결론으로 씁니다. 통과하지 못한 것은 “참고용”으로 구분합니다</td></tr>
+          <tr><td>확인 절차</td><td>인용한 응답이 실제로 있는지, 문장 속 숫자가 집계와 같은지, 인용이 주장을 뒷받침하는지, 과장된 표현이 아닌지, 개인이 드러날 위험이 없는지 — 다섯 가지를 모두 확인합니다</td></tr>
+          <tr><td>개인정보 보호</td><td>이름·직책 등은 저장 시점에 지웁니다. 인원 5명 미만 조직은 결과를 따로 보여주지 않고 상위 조직 집계에만 반영합니다</td></tr>
+          <tr><td>발행 조건</td><td>근거가 연결되지 않은 문장이 한 줄이라도 있으면 발행되지 않습니다</td></tr>
+        </tbody>
+      </table>
+      <div class="mono" style="line-height:1.9;margin-top:10px">
+        run_2026H1_0142 · rule_catalog v1.3 · k_threshold 5 · policy v2.1<br>
+        게이트 G1~G6 전수 통과 · 배포 불변식 I1·I3·I5·I6·I8·I10 검사 결과 0행<br>
+        수정 요청 req_0412(accepted) · req_0388(not_applicable) · req_0421(routed_to_catalog)
+      </div>
+    </div>
+  </details>
+</main>
+
+<div class="scrim" id="scrim"></div>
+<div class="modal" id="modal" role="dialog" aria-modal="true" tabindex="-1">
+  <button class="m-close" id="m-close" aria-label="닫기">✕</button>
+  <div class="m-left" id="m-left"></div>
+  <div class="m-right" id="m-right"></div>
+</div>
+
+<script>
+/* ══════════ 객관식 31문항 ══════════ */
+const Q5=[
+ [1,'목표 정렬','우리 조직의 목표는 회사의 성장과 발전에 중요한 기여를 하고 있다.',4.02,+0.05],
+ [2,'목표 정렬','우리 조직에서는 중요한 의사결정을 할 때, ‘이 결정이 조직의 목표 달성에 도움이 되는가’를 분명히 따진다.',3.88,+0.02],
+ [3,'목표 정렬','나의 업무와 과제는 우리 조직 전체 성과에 중요한 역할을 하고 있다.',4.05,+0.06],
+ [4,'목표 정렬','나는 우리 조직의 목표와 방향성을 누구에게라도 명확하게 설명할 수 있다.',3.79,+0.01],
+ [5,'목표 정렬','우리 리더는 조직의 목표를 구체적이고 명확하게 설명해 준다.',3.86,+0.04],
+ [9,'목표 정렬','나는 우리 조직의 지속적인 성장을 위해, 기존 방식을 개선하기 위한 시도를 한다.',3.92,+0.06],
+ [8,'실행·책임','우리 조직은 목표 달성 과정에서 유관조직과 이해관계자의 기여를 명확히 인정한다.',3.94,+0.03],
+ [10,'실행·책임','우리 조직에서 업무 프로세스의 비효율이 발견되면, 나는 개선 방안을 적극적으로 제안한다.',3.87,+0.02],
+ [19,'실행·책임','우리 조직에서는 책임이 주어지는 만큼, 권한도 충분히 제공된다.',4.08,+0.05],
+ [20,'실행·책임','우리 조직은 업무 인수인계 시 과제만 전달하는 것이 아니라, 책임 범위를 명확히 공유한다.',3.96,+0.04],
+ [21,'실행·책임','나는 기한 내에 업무를 마치는 것을 원칙으로 삼고 일한다.',4.31,+0.06],
+ [22,'실행·책임','나는 우리 조직의 목표 달성을 위해 부서나 직무의 경계를 넘어 적극적으로 협력한다.',4.14,+0.04],
+ [25,'관계·배려','우리 조직은 구성원 간 서로의 인격과 감정을 배려한다.',3.91,+0.02],
+ [26,'관계·배려','우리 조직에는 구성원의 컨디션을 점검하고 지원하는 제도나 방식이 마련되어 있다.',3.68,+0.04],
+ [27,'관계·배려','나는 우리 조직 내 인간관계에 만족한다.',3.99,+0.03],
+ [11,'리더십','우리 리더는 목표 달성을 위해 기꺼이 자신의 한계를 인정하고, 구성원에게 도움을 요청한다.',3.81,-0.04],
+ [12,'리더십','우리 리더는 변화의 방향과 방법에 대해 적극적으로 의견을 제시한다.',3.77,-0.05],
+ [18,'리더십','우리 리더는 자신의 생각보다 더 좋은 의견이 나오면 바로 수용한다.',3.42,-0.07],
+ [24,'리더십','우리 리더는 구성원들이 맡은 업무를 책임지고 마무리할 수 있도록 적극적으로 지원한다.',3.88,-0.06],
+ [36,'리더십','우리 리더는 조직의 가치와 원칙을 솔선수범하여 실천한다.',3.82,-0.08],
+ [29,'성장·보상','나는 우리 조직에서 충분한 자율성을 누리고 있다.',3.68,-0.02],
+ [30,'성장·보상','나는 우리 조직 안에서 더 나은 사람으로 성장하고 있다.',3.44,-0.06],
+ [31,'성장·보상','나는 우리 조직에서 내 일을 잘 해내고 있다고 느낀다.',3.72,+0.01],
+ [33,'성장·보상','나는 우리 조직에서 내가 기여한 만큼 공정한 보상을 받고 있다고 생각한다.',3.34,-0.07],
+ [34,'성장·보상','나는 우리 조직에서 일하면서 일과 생활의 균형이 잘 잡힌 삶을 살고 있다.',3.37,-0.06],
+ [6,'소통·논의','우리 조직에서는 잘못된 판단이나 실패가 발생했을 때, 이를 자연스럽게 인정하고 개선한다.',3.55,-0.18],
+ [7,'소통·논의','우리 조직은 동료 구성원의 다른 생각이나 비판을 방어적으로 받아들이기보다 학습의 기회로 삼는다.',3.45,-0.21],
+ [13,'소통·논의','우리 조직은 업무와 관련하여 치열하게 논의하는 것을 자연스러운 일로 생각한다.',3.51,-0.14],
+ [14,'소통·논의','우리 조직에서는 회의 참가자들이 골고루 발언하는 것이 일상적이다.',3.21,-0.31],
+ [15,'소통·논의','우리 조직에서는 업무에 대한 의견 차이를 숨기거나 피하지 않고 공유한다.',3.28,-0.29],
+ [16,'소통·논의','나는 회의에서 개인적인 입장보다 목표 지향적 관점에서 발언을 한다.',3.27,-0.37]
+].map(([no,area,t,avg,d])=>({no,area,t,avg,d,prev:+(avg-d).toFixed(2)}));
+
+const N=862;
+function distFor(target){
+  /* 정규분포 모양을 유지한 채 중심(μ)만 이분탐색해 목표 평균을 맞춘다. */
+  const SD=1.05;
+  const shape=mu=>{const w=[1,2,3,4,5].map(s=>Math.exp(-((s-mu)**2)/(2*SD*SD)));
+    const sw=w.reduce((a,b)=>a+b,0);return w.map(x=>x/sw)};
+  const meanOf=p=>p.reduce((a,x,i)=>a+x*(i+1),0);
+  let lo=0.4,hi=5.6;
+  for(let k=0;k<64;k++){const mid=(lo+hi)/2;meanOf(shape(mid))<target?lo=mid:hi=mid}
+  let c=shape((lo+hi)/2).map(x=>Math.round(x*N));
+  c[2]+=N-c.reduce((a,b)=>a+b,0);
+  const m=()=>c.reduce((a,x,i)=>a+x*(i+1),0)/N;
+  let g=0;
+  while(Math.abs(m()-target)>.004&&g++<4000){
+    if(m()<target){for(let i=3;i>=0;i--)if(c[i]>1){c[i]--;c[i+1]++;break}}
+    else{for(let i=1;i<5;i++)if(c[i]>1){c[i]--;c[i-1]++;break}}
+  }
+  return c;
+}
+Q5.forEach(q=>{q.c=distFor(q.avg);
+  q.real=+(q.c.reduce((a,x,i)=>a+x*(i+1),0)/N).toFixed(2);
+  q.neg=Math.round((q.c[0]+q.c[1])/N*100);
+  q.mid=Math.round(q.c[2]/N*100);
+  q.pos=100-q.neg-q.mid;});
+
+const AREA_ORDER=['실행·책임','목표 정렬','관계·배려','리더십','성장·보상','소통·논의'];
+const AREAS=AREA_ORDER.map(k=>{
+  const qs=Q5.filter(q=>q.area===k),n=qs.length;
+  const avg=+(qs.reduce((a,q)=>a+q.real,0)/n).toFixed(2);
+  const prev=+(qs.reduce((a,q)=>a+q.prev,0)/n).toFixed(2);
+  const tot=qs.reduce((a,q)=>[a[0]+q.c[0]+q.c[1],a[1]+q.c[2],a[2]+q.c[3]+q.c[4]],[0,0,0]);
+  const s=tot.reduce((a,b)=>a+b,0);
+  const neg=Math.round(tot[0]/s*100),mid=Math.round(tot[1]/s*100);
+  return {k,q:n,avg,prev,s:[neg,mid,100-neg-mid],counts:tot,total:s};
+});
+const ALLAVG=+(Q5.reduce((a,q)=>a+q.real,0)/Q5.length).toFixed(2);
+
+/* ══════════ 주제 ══════════ */
+const THEMES=[
+  {k:'부서 간 협업이 매끄럽지 않다',n:312,p:36.2,prev:22.0,d:+14.2,s:[71,20,9]},
+  {k:'팀 안에서 서로 돕는 문화 (강점)',n:268,p:31.1,prev:29.4,d:+1.7,s:[6,17,77]},
+  {k:'성장·역량 개발 지원 부족',n:248,p:28.8,prev:33.1,d:-4.3,s:[63,28,9]},
+  {k:'업무량·인력 부족',n:201,p:23.3,prev:21.2,d:+2.1,s:[74,19,7]},
+  {k:'리더 피드백 부족',n:176,p:20.4,prev:22.2,d:-1.8,s:[68,24,8]},
+  {k:'평가·보상 납득 어려움',n:143,p:16.6,prev:11.0,d:+5.6,s:[70,22,8]},
+  {k:'회의·보고 준비 부담',n:97,p:11.3,prev:null,d:null,s:[76,18,6]},
+  {k:'업무 도구·시스템 불편',n:84,p:9.7,prev:null,d:null,s:[66,27,7]}];
+const TREND={x:['2025 상반기','2025 하반기','2026 상반기'],s:[
+  {k:'협업 문제',c:'var(--series-1)',v:[19.4,22.0,36.2]},
+  {k:'성장 지원 부족',c:'var(--series-2)',v:[30.2,33.1,28.8]},
+  {k:'평가·보상',c:'var(--series-3)',v:[9.8,11.0,16.6]}]};
+
+/* ══════════ 응답 문장 풀 · [문장, 성격, 연결된 주제들] ══════════ */
+const POOL={
+ coop:[['협업 프로세스가 제각각이라 어디서부터 요청해야 하는지 모르겠습니다','부정',['부서 간 협업이 매끄럽지 않다']],
+  ['담당이 명확하지 않아 같은 요청을 여러 번 반복하게 됩니다','부정',['부서 간 협업이 매끄럽지 않다','담당·권한 불명확']],
+  ['부서마다 진행 방식이 달라 일정을 맞추기 어렵습니다','부정',['부서 간 협업이 매끄럽지 않다','일정 조율 어려움']],
+  ['타 부서에 요청할 때 누구에게 말해야 하는지 매번 물어봐야 합니다','부정',['부서 간 협업이 매끄럽지 않다']],
+  ['협업 요청이 들어와도 우선순위 기준이 없어 뒤로 밀립니다','부정',['부서 간 협업이 매끄럽지 않다','업무량·인력 부족']],
+  ['부서 간 회의는 많은데 결정되는 것이 없습니다','부정',['부서 간 협업이 매끄럽지 않다','회의·보고 준비 부담']],
+  ['업무 경계가 애매한 일은 서로 미루게 됩니다','부정',['부서 간 협업이 매끄럽지 않다','담당·권한 불명확']],
+  ['공동 과제인데 책임자가 지정되지 않아 진행이 더딥니다','부정',['부서 간 협업이 매끄럽지 않다','담당·권한 불명확']],
+  ['자료를 여러 부서에서 따로 관리해 최신본이 무엇인지 모르겠습니다','부정',['부서 간 협업이 매끄럽지 않다','업무 도구·시스템 불편']],
+  ['협의된 내용이 문서로 남지 않아 나중에 말이 달라집니다','부정',['부서 간 협업이 매끄럽지 않다']],
+  ['옆 부서가 무슨 일을 하는지 몰라 중복 작업이 생깁니다','부정',['부서 간 협업이 매끄럽지 않다']],
+  ['요청 양식이 제각각이라 매번 새로 만들어야 합니다','부정',['부서 간 협업이 매끄럽지 않다','업무 도구·시스템 불편']],
+  ['협업 담당자가 자주 바뀌어 처음부터 다시 설명해야 합니다','부정',['부서 간 협업이 매끄럽지 않다']],
+  ['부서 간 목표가 달라 조율에 시간이 많이 듭니다','부정',['부서 간 협업이 매끄럽지 않다','일정 조율 어려움']],
+  ['결정 권한이 어디에 있는지 불분명합니다','부정',['담당·권한 불명확','부서 간 협업이 매끄럽지 않다']],
+  ['진행 상황을 공유하는 창구가 없어 각자 물어봅니다','부정',['부서 간 협업이 매끄럽지 않다']],
+  ['도움을 요청하면 대체로 협조적이라 그나마 진행됩니다','보통',['부서 간 협업이 매끄럽지 않다']],
+  ['필요할 때는 결국 개인적인 친분으로 해결하고 있습니다','보통',['부서 간 협업이 매끄럽지 않다']],
+  ['일부 부서는 창구가 정리되어 있어 수월합니다','보통',['부서 간 협업이 매끄럽지 않다']],
+  ['작년보다는 부서 간 소통 창구가 정리된 편입니다','긍정',['부서 간 협업이 매끄럽지 않다']],
+  ['정기 협의체가 생긴 뒤로 조금 나아졌습니다','긍정',['부서 간 협업이 매끄럽지 않다']],
+  ['서로 상황을 이해하려는 분위기는 있습니다','긍정',['부서 간 협업이 매끄럽지 않다','팀 안에서 서로 돕는 문화']]],
+ grow:[['교육을 신청해도 업무 일정 때문에 참석하지 못하는 경우가 반복됩니다','부정',['성장·역량 개발 지원 부족','교육 시간 확보']],
+  ['교육 예산이 부서마다 달라 기회가 고르지 않습니다','부정',['성장·역량 개발 지원 부족']],
+  ['배우고 싶은 분야의 과정이 사내에 없습니다','부정',['성장·역량 개발 지원 부족']],
+  ['업무에 치여 자기 개발 시간을 내기 어렵습니다','부정',['성장·역량 개발 지원 부족','업무량·인력 부족']],
+  ['경력 개발을 상담할 창구가 없습니다','부정',['성장·역량 개발 지원 부족']],
+  ['직무를 바꿔볼 기회가 사실상 없습니다','부정',['성장·역량 개발 지원 부족','직무 전환 기회']],
+  ['교육을 들어도 실제 업무에 적용할 기회가 없습니다','부정',['성장·역량 개발 지원 부족']],
+  ['외부 세미나 참석이 승인되기 어렵습니다','부정',['성장·역량 개발 지원 부족']],
+  ['필요한 자격증 비용 지원 범위가 좁습니다','부정',['성장·역량 개발 지원 부족']],
+  ['성장 방향을 함께 고민해 줄 사람이 없습니다','부정',['성장·역량 개발 지원 부족','리더 피드백 부족']],
+  ['온라인 강의는 열려 있으나 시간이 부족합니다','보통',['성장·역량 개발 지원 부족','교육 시간 확보']],
+  ['필요한 교육은 대체로 신청할 수 있습니다','보통',['성장·역량 개발 지원 부족']],
+  ['팀장이 학습 시간을 배려해 주는 편입니다','긍정',['성장·역량 개발 지원 부족','팀 안에서 서로 돕는 문화']],
+  ['사내 스터디가 활성화되어 도움이 됩니다','긍정',['성장·역량 개발 지원 부족']]],
+ meet:[['보고 자료 준비에 실제 업무보다 더 많은 시간이 들어갑니다','부정',['회의·보고 준비 부담']],
+  ['같은 내용을 형식만 바꿔 여러 번 만듭니다','부정',['회의·보고 준비 부담']],
+  ['회의 자료를 매번 새로 만들어야 합니다','부정',['회의·보고 준비 부담']],
+  ['회의가 많아 정작 업무 시간이 부족합니다','부정',['회의·보고 준비 부담','업무량·인력 부족']],
+  ['참석하지 않아도 되는 회의에 불려 갑니다','부정',['회의·보고 준비 부담']],
+  ['보고 단계가 많아 의사결정이 늦어집니다','부정',['회의·보고 준비 부담','의사결정 속도']],
+  ['회의 결과가 공유되지 않아 다시 회의합니다','부정',['회의·보고 준비 부담','부서 간 협업이 매끄럽지 않다']],
+  ['자료 양식이 자주 바뀌어 다시 작업합니다','부정',['회의·보고 준비 부담','업무 도구·시스템 불편']],
+  ['필요한 회의도 있어 일률적으로 줄이긴 어렵습니다','보통',['회의·보고 준비 부담']],
+  ['최근 회의 시간을 줄이려는 시도는 있습니다','긍정',['회의·보고 준비 부담']]],
+ team:[['팀 안에서는 서로 막히는 부분을 먼저 물어봐 주는 분위기가 있습니다','긍정',['팀 안에서 서로 돕는 문화']],
+  ['모르는 것을 물어보기 편한 팀 분위기입니다','긍정',['팀 안에서 서로 돕는 문화']],
+  ['바쁠 때 서로 일을 나눠 맡습니다','긍정',['팀 안에서 서로 돕는 문화']],
+  ['신규 입사자가 빨리 적응하도록 도와줍니다','긍정',['팀 안에서 서로 돕는 문화']],
+  ['실수해도 함께 수습하려는 문화가 있습니다','긍정',['팀 안에서 서로 돕는 문화']],
+  ['팀원끼리 정보를 숨기지 않고 공유합니다','긍정',['팀 안에서 서로 돕는 문화']],
+  ['어려운 과제를 함께 해내고 성취감을 느꼈습니다','긍정',['팀 안에서 서로 돕는 문화','성과 달성 경험']],
+  ['선배가 자기 노하우를 아낌없이 알려줍니다','긍정',['팀 안에서 서로 돕는 문화','성장 경험']],
+  ['서로 컨디션을 챙겨 주는 편입니다','긍정',['팀 안에서 서로 돕는 문화']],
+  ['팀 내 협업은 좋지만 다른 부서와는 다릅니다','보통',['팀 안에서 서로 돕는 문화','부서 간 협업이 매끄럽지 않다']],
+  ['사람에 따라 편차는 있습니다','보통',['팀 안에서 서로 돕는 문화']],
+  ['업무가 몰릴 때는 여유가 없어지기도 합니다','부정',['팀 안에서 서로 돕는 문화','업무량·인력 부족']]],
+ voice:[['회의에서 반대 의견을 내면 분위기가 굳어집니다','부정',['발언 기회 불균등']],
+  ['결론이 정해진 채로 회의가 시작됩니다','부정',['회의 방식 개선']],
+  ['발언 기회가 특정 사람에게 몰립니다','부정',['발언 기회 불균등']],
+  ['의견을 내도 반영되지 않아 점점 말을 아끼게 됩니다','부정',['발언 기회 불균등','리더 피드백 부족']],
+  ['익명으로 의견을 낼 수 있는 창구가 필요합니다','부정',['익명 의견 창구 필요']],
+  ['소규모로 나눠 이야기하면 훨씬 활발합니다','보통',['회의 방식 개선']],
+  ['주제를 미리 공유하면 준비해서 말할 수 있습니다','보통',['회의 방식 개선']],
+  ['팀 회의에서는 비교적 자유롭게 말합니다','긍정',['팀 안에서 서로 돕는 문화']],
+  ['리더가 먼저 의견을 묻는 팀은 분위기가 다릅니다','긍정',['회의 방식 개선']]],
+ leader:[['방향을 더 구체적으로 알려주셨으면 합니다','부정',['방향 제시 요청']],
+  ['피드백을 자주 받고 싶습니다','부정',['리더 피드백 부족']],
+  ['업무 지시가 자주 바뀌어 혼란스럽습니다','부정',['방향 제시 요청']],
+  ['성과를 인정해 주는 표현이 있으면 좋겠습니다','부정',['리더 피드백 부족']],
+  ['의사결정을 미루지 않으셨으면 합니다','부정',['의사결정 속도']],
+  ['바쁘신 것은 알지만 면담 시간을 늘려주시면 좋겠습니다','보통',['리더 피드백 부족']],
+  ['현재도 충분히 지원해 주고 계십니다','긍정',['리더 피드백 부족']],
+  ['어려운 일을 함께 책임져 주셔서 감사합니다','긍정',['팀 안에서 서로 돕는 문화']]],
+ image:[['바쁘지만 배울 것이 많은 조직','긍정',['업무량이 많음','성장 경험']],
+  ['성실한 사람들','긍정',['서로 돕는 분위기']],
+  ['일은 많고 사람은 부족한 곳','부정',['업무량이 많음']],
+  ['변화가 빠른 조직','보통',[]],
+  ['안정적이지만 답답한 면이 있는 곳','보통',['소통 아쉬움']],
+  ['서로 돕는 분위기','긍정',['서로 돕는 분위기']],
+  ['회의가 많은 조직','부정',['회의·보고 준비 부담']],
+  ['목표는 분명한 조직','긍정',[]],
+  ['소통이 아쉬운 조직','부정',['소통 아쉬움']],
+  ['성장의 기회가 있는 곳','긍정',['성장 경험']]],
+ future:[['부서 간 협업이 지금보다 매끄러워졌으면 합니다','보통',['협업 개선 희망']],
+  ['불필요한 보고가 줄어든 모습이면 좋겠습니다','보통',['보고 간소화']],
+  ['각자 담당이 분명해진 조직이 되면 좋겠습니다','보통',['협업 개선 희망','담당·권한 불명확']],
+  ['배우고 성장할 수 있는 기회가 늘었으면 합니다','보통',['성장·역량 개발 지원 부족']],
+  ['지금의 좋은 분위기가 유지되면 좋겠습니다','긍정',['팀 안에서 서로 돕는 문화']],
+  ['성과에 대한 보상이 더 공정해졌으면 합니다','부정',['보상 공정성']],
+  ['업무량이 조정되어 여유가 생기면 좋겠습니다','부정',['업무량·인력 부족']],
+  ['서로 솔직하게 말할 수 있는 조직이 되길 바랍니다','보통',['소통 아쉬움']]],
+ focus:[['회의와 보고 준비로 집중할 시간이 부족합니다','부정',['회의·보고 준비 부담']],
+  ['갑작스러운 업무 요청이 자주 들어옵니다','부정',['업무량·인력 부족']],
+  ['담당이 불분명한 일이 계속 넘어옵니다','부정',['담당·권한 불명확','업무량·인력 부족']],
+  ['시스템이 느려 작업이 자주 끊깁니다','부정',['업무 도구·시스템 불편']],
+  ['자리 주변이 소란스러워 집중이 어렵습니다','부정',[]],
+  ['업무량 자체가 많습니다','부정',['업무량·인력 부족']],
+  ['집중 근무 시간이 있으면 좋겠습니다','보통',['회의·보고 준비 부담']],
+  ['재택근무일에는 몰입이 잘 됩니다','긍정',[]]],
+ proud:[['어려운 프로젝트를 기한 내에 끝냈을 때','긍정',['성과 달성 경험']],
+  ['내 제안이 실제로 반영되었을 때','긍정',['성과 달성 경험']],
+  ['후배가 잘 성장하는 것을 볼 때','긍정',['성장 경험','팀 안에서 서로 돕는 문화']],
+  ['고객이나 유관 부서에서 감사 인사를 받았을 때','긍정',['성과 달성 경험']],
+  ['팀이 함께 목표를 달성했을 때','긍정',['성과 달성 경험','팀 안에서 서로 돕는 문화']],
+  ['새로운 업무를 맡아 배운 것이 많았을 때','긍정',['성장 경험']],
+  ['특별히 떠오르는 경험이 없습니다','보통',[]]]};
+
+const QT=[
+ {no:39,req:true,resp:862,pool:'coop',t:'우리 조직이 하나의 팀이 되기 위해 개선하거나 보완해야 할 점이 있다면 자유롭게 기술하여 주십시오.',
+  themes:[['부서 간 협업이 매끄럽지 않다',214],['업무량·인력 부족',122],['회의·보고 준비 부담',44]],s:[62,26,12]},
+ {no:40,req:true,resp:862,pool:'image',t:'우리 조직을 생각할 때 대표적으로 떠오르는 이미지를 2가지 이상 자유롭게 기술하여 주십시오.',
+  themes:[['서로 돕는 분위기',196],['업무량이 많음',171],['소통 아쉬움',108]],s:[41,25,34]},
+ {no:23,req:false,resp:431,pool:'coop',t:'동료 또는 타 부서와 협업할 때 가장 어려운 점은 무엇입니까?',
+  themes:[['부서 간 협업이 매끄럽지 않다',98],['담당·권한 불명확',87],['일정 조율 어려움',63]],s:[74,19,7]},
+ {no:28,req:false,resp:397,pool:'grow',t:'본인의 성장과 역량 개발을 위해 회사와 조직이 지원해주길 바라는 것은 무엇입니까?',
+  themes:[['성장·역량 개발 지원 부족',176],['교육 시간 확보',151],['직무 전환 기회',58]],s:[63,28,9]},
+ {no:35,req:false,resp:368,pool:'focus',t:'업무 몰입을 방해하는 요인이 있다면 무엇인지 기술하여 주십시오.',
+  themes:[['업무량·인력 부족',134],['회의·보고 준비 부담',61],['업무 도구·시스템 불편',52]],s:[78,16,6]},
+ {no:37,req:false,resp:341,pool:'leader',t:'우리 리더에게 바라는 점이 있다면 자유롭게 기술하여 주십시오.',
+  themes:[['리더 피드백 부족',129],['방향 제시 요청',94],['의사결정 속도',47]],s:[58,27,15]},
+ {no:17,req:false,resp:196,pool:'voice',t:'우리 조직에서 서로 다른 의견을 더 자유롭고 활발하게 나누기 위해 무엇이 필요하다고 생각하십니까?',
+  themes:[['발언 기회 불균등',88],['익명 의견 창구 필요',54],['회의 방식 개선',41]],s:[66,22,12]},
+ {no:38,req:false,resp:189,pool:'team',t:'우리 조직이 가장 잘하고 있는 점(강점)은 무엇이라고 생각하십니까?',
+  themes:[['팀 안에서 서로 돕는 문화',156],['목표 이해도',48],['업무 책임감',37]],s:[8,15,77]},
+ {no:32,req:false,resp:142,pool:'proud',t:'최근 1년간 우리 조직에서 일하며 가장 보람 있었던 경험을 자유롭게 기술하여 주십시오.',
+  themes:[['성과 달성 경험',97],['팀 안에서 서로 돕는 문화',112],['성장 경험',41]],s:[6,13,81]},
+ {no:41,req:false,resp:74,pool:'future',t:'우리 조직이 1년 뒤 어떤 모습이 되길 바라는지 자유롭게 기술하여 주십시오.',
+  themes:[['협업 개선 희망',38],['보고 간소화',22],['보상 공정성',17]],s:[44,38,18]}];
+
+/* ── 응답자 구성(Demographic) — 고정 시드 해시로 결정론적 부여 ── */
+const D_ROLE=['팀원','팀원','팀원','팀장','팀원','팀원','팀원','팀원','임원','팀원','팀원','팀장','팀원','팀원','팀원','팀원'];
+const D_AGE=['30대','20대','30대','40대','30대','40대','50대 이상','20대','30대','40대','20대','30대'];
+const D_TEN=['3~5년','1~3년','10년 이상','5~10년','1년 미만','5~10년','3~5년','1~3년','5~10년','3~5년'];
+const D_GEN=['남성','여성','남성','남성','여성','남성','여성'];
+const D_HIRE=['그룹 내 입사','그룹 내 입사','타 그룹/기업 경력입사','그룹 내 입사','타 그룹/기업 경력입사'];
+function hseed(i,salt){let x=((i+1)*2654435761+salt*40503)>>>0;
+  x^=x>>>13;x=(x*0x5bd1e995)>>>0;x^=x>>>15;return x>>>0}
+function demoFor(i){return{
+  role:D_ROLE[hseed(i,1)%D_ROLE.length], age:D_AGE[hseed(i,2)%D_AGE.length],
+  ten:D_TEN[hseed(i,3)%D_TEN.length],  gen:D_GEN[hseed(i,4)%D_GEN.length],
+  hire:D_HIRE[hseed(i,5)%D_HIRE.length]}}
+
+function buildTextList(pool,total,qlabel){
+  const p=POOL[pool],tail=['','','',' 개선이 필요합니다.',' 기준이 있으면 좋겠습니다.',' 이 부분이 가장 아쉽습니다.'],out=[];
+  for(let i=0;i<total;i++){const b=p[i%p.length];
+    out.push({no:i+1,txt:b[0],tail:(pool==='image'?'':tail[(i*3)%tail.length]),senti:b[1],
+              themes:b[2]||[],q:qlabel,...demoFor(i)})}
+  return out;
+}
+function buildScoreList(q){
+  const out=[];let n=0;
+  for(let s=5;s>=1;s--)for(let j=0;j<q.c[s-1];j++){n++;out.push({no:n,score:s,...demoFor(n)})}
+  return out;
+}
+
+/* ══════════ 팝업 모델 ══════════ */
+const SCORE_COLOR={1:'#D3180C',2:'#FF6157',3:'#94A3B8',4:'#5F9EEF',5:'#0065D0'};
+const SC={부정:'var(--neg)',보통:'var(--mid)',긍정:'var(--pos)'};
+const DEMOS=[['role','직급',['임원','팀장','팀원']],
+             ['age','연령대',['20대','30대','40대','50대 이상']],
+             ['ten','근속',['1년 미만','1~3년','3~5년','5~10년','10년 이상']],
+             ['gen','성별',['남성','여성']],
+             ['hire','채용경로',['그룹 내 입사','타 그룹/기업 경력입사']]];
+const esc=s=>String(s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+const cap=id=>document.getElementById(id);
+
+const EV={
+ i1:{claim:'부서 간 협업에 대한 우려가 작년보다 뚜렷하게 늘었습니다',
+  cards:[['이렇게 말한 사람','312<small>명</small>'],['작년 대비','+14.2<small>%p</small>'],['판단 신뢰도','높음<small> 0.78</small>']],
+  how:['862명이 쓴 자유 응답을 의미 단위로 나눈 뒤, <b>협업이 매끄럽지 않다</b>는 내용을 하나의 주제로 묶었습니다.',
+    '이 주제를 언급한 사람은 <b>312명(36.2%)</b>입니다. 작년에는 777명 중 171명(22.0%)이었습니다.',
+    '차이는 <b>14.2%p</b>입니다. 우연히 이 정도 차이가 날 확률은 1.3%로 계산되어 <b>실제 변화</b>로 판단했습니다.',
+    '언급 중 <b>71%가 부정적</b>이어서, 관심이 는 것이 아니라 불만이 퍼진 것으로 보았습니다.'],
+  rule:'“뚜렷하게 늘었다”는 아래 4가지를 모두 만족할 때만 씁니다.',
+  ruleItems:[['작년보다 10%p 이상 증가','14.2%p',1],['최소 20명 이상 언급','312명',1],
+    ['의견 방향이 한쪽으로 모임 (60% 이상)','71%',1],['우연일 확률 5% 미만','1.3%',1]],
+  checks:[['인용한 응답이 실제로 존재하는가',1],['문장 속 숫자가 집계와 같은가',1],
+    ['인용이 이 주장을 뒷받침하는가 (다른 AI가 교차 확인)',1],['“모두·항상” 같은 과장 표현이 아닌가',1],
+    ['개인이 드러날 위험이 없는가',1],['반대 의견도 함께 검토했는가 (반대 9%)',1]],
+  conf:[['응답 수가 충분한가',92],['의견 방향이 일치하는가',71],['인용이 주장을 뒷받침하는가',86],
+    ['우연이라 보기 어려운가',74],['사람이 정한 기준으로 판단했는가',100]],
+  facts:[
+   {l:'이 주제를 말한 사람 수',v:'312명',d:{t:'이 주제를 말한 사람 수',big:'312',unit:'명 / 응답자 862명',
+    cond:'같은 사람이 여러 번 말해도 1명으로 셉니다.',
+    rows:[['39_문항에서 언급','214명','24.8%'],['23_문항에서 언급','98명','11.4%'],['중복 제외','312명','36.2%']],
+    dist:[['어디에 요청할지 모르겠다',142,45],['담당자가 없다',103,33],['부서마다 방식이 다르다',67,22]],
+    distTitle:'어떤 이야기였나',rerun:'2026-08-11 10:14 다시 계산 · 같은 값 확인'}},
+   {l:'작년 대비 변화',v:'+14.2%p',d:{t:'작년과 비교',big:'+14.2',unit:'%p',
+    cond:'작년 하반기 조사와 같은 기준으로 비교했습니다.',
+    rows:[['올해','312명 / 862명','36.2%'],['작년','171명 / 777명','22.0%'],['차이','','+14.2%p']],
+    rerun:'2026-08-11 10:14 다시 계산 · 같은 값 확인'}},
+   {l:'부정적인 의견 비율',v:'71%',d:{t:'의견의 성격',big:'71',unit:'% 부정적',
+    cond:'응답 조각 312개를 자동 분류했습니다.',
+    dist:[['긍정',28,9],['보통',63,20],['부정',221,71]],distTitle:'성격별 건수',
+    rerun:'2026-08-11 10:14 다시 계산 · 같은 값 확인'}},
+   {l:'우연일 확률',v:'1.3%',d:{t:'우연히 이런 차이가 날 확률',big:'1.3',unit:'%',
+    cond:'작년(171/777)과 올해(312/862)를 통계적으로 비교했습니다.',
+    rows:[['실제 차이','+14.2%p',''],['오차를 감안한 범위','+8.9 ~ +19.5%p',''],['판단 기준','5% 미만','통과']],
+    rerun:'2026-08-11 10:14 다시 계산 · 같은 값 확인'}}],
+  list:{count:312,pool:'coop',label:'이 주제로 분류된 응답',mixQ:true,
+    note:'인원이 5명 미만인 팀(C팀 3명·D팀 4명)의 응답 14건은 개인이 드러날 수 있어 목록에서 제외했습니다. 해당 응답도 인원수 집계에는 포함되어 있습니다.'},
+  tech:[['insight_id','ins_2291'],['theme_id','thm_0114'],['rule','trend_up_v3@1.3'],
+    ['facts','fact_8812 / 8813 / 8814 / 8816'],['gates','G1·G2 pass · G3 0.88 · G4·G5·G6 pass']]},
+
+ i2:{claim:'성장·역량 개발 지원이 부족하다는 언급이 작년보다 줄었습니다',
+  cards:[['이렇게 말한 사람','248<small>명</small>'],['작년 대비','−4.3<small>%p</small>'],['판단 신뢰도','보통<small> 0.66</small>']],
+  how:['이 주제를 언급한 사람은 <b>248명(28.8%)</b>으로 작년 33.1%보다 줄었습니다.',
+    '줄어든 항목은 주로 <b>직무 전환 기회</b>이고, 교육 시간·예산 요청은 여전히 많습니다(151건).',
+    '그런데 <b>객관식 성장·보상 점수는 오히려 내려갔습니다</b>(3.55 → 3.51). 두 결과의 방향이 다릅니다.',
+    '“개선되었다”고 단정할 수 없어 <b>신뢰도를 한 단계 낮추고</b> 표현을 조심스럽게 바꿨습니다.'],
+  rule:'“줄었다”는 아래 3가지를 만족할 때 씁니다.',
+  ruleItems:[['작년 대비 3%p 이상 변화','4.3%p',1],['최소 20명 이상 언급','248명',1],['우연일 확률 5% 미만','4.1%',1]],
+  checks:[['인용한 응답이 실제로 존재하는가',1],['문장 속 숫자가 집계와 같은가',1],
+    ['인용이 이 주장을 뒷받침하는가',1],['객관식 결과와 방향이 같은가',0],['개인이 드러날 위험이 없는가',1]],
+  conf:[['응답 수가 충분한가',88],['의견 방향이 일치하는가',63],['인용이 주장을 뒷받침하는가',81],
+    ['객관식과 방향이 맞는가',30],['사람이 정한 기준으로 판단했는가',100]],
+  facts:[
+   {l:'이 주제를 말한 사람 수',v:'248명',d:{t:'이 주제를 말한 사람 수',big:'248',unit:'명 / 응답자 862명',
+    cond:'28·37_문항에서 성장·역량 개발을 언급한 사람입니다.',
+    rows:[['올해','248명 / 862명','28.8%'],['작년','257명 / 777명','33.1%'],['차이','','−4.3%p']],
+    rerun:'2026-08-11 10:16 다시 계산 · 같은 값 확인'}},
+   {l:'객관식 성장·보상 점수',v:'3.51점',d:{t:'객관식 성장·보상 영역 (5문항)',big:'3.51',unit:'/ 5점 · 작년 3.55',
+    cond:'이 영역에 속한 문항 5개의 평균입니다. 각 문항은 3절 표에서 눌러 볼 수 있습니다.',
+    rows:[['충분한 자율성을 누리고 있다','3.68','−0.02'],['더 나은 사람으로 성장하고 있다','3.44','−0.06'],
+      ['내 일을 잘 해내고 있다','3.72','+0.01'],['기여한 만큼 공정한 보상을 받는다','3.34','−0.07'],
+      ['일과 생활의 균형이 잡혀 있다','3.37','−0.06']],
+    note:'주관식 언급은 줄었는데 점수는 나아지지 않았습니다. 그래서 신뢰도를 한 단계 낮췄습니다.',
+    rerun:'2026-08-11 10:16 다시 계산 · 같은 값 확인'}}],
+  list:{count:248,pool:'grow',label:'이 주제로 분류된 응답',mixQ:true,
+    note:'인원이 5명 미만인 팀의 응답은 목록에서 제외했습니다.'},
+  tech:[['insight_id','ins_2288'],['theme_id','thm_0121'],['rule','trend_down_v2@1.1'],
+    ['cross_check','객관식 방향 불일치 → 신뢰도 강등']]},
+
+ i3:{claim:'회의·보고 준비 부담이 올해 처음 등장한 주제입니다',
+  cards:[['이렇게 말한 사람','97<small>명</small>'],['작년','없음'],['판단 신뢰도','낮음<small> 0.54</small>']],
+  how:['작년에는 없던 내용이 하나의 주제로 묶였습니다. <b>97명(11.3%)</b>이 언급했습니다.',
+    '정식 판단 기준은 <b>100명 이상</b>인데 3명이 모자랍니다.',
+    '그래서 <b>AI가 찾은 참고용 주제</b>로 구분해 표시했습니다.',
+    '다음 회차에도 같은 내용이 나오는지 확인이 필요합니다.'],
+  rule:'정식 주제로 인정하려면 아래를 만족해야 합니다.',
+  ruleItems:[['최소 100명 이상 언급','97명',0],['내용이 하나로 잘 묶임 (0.55 이상)','0.58',1]],
+  checks:[['인용한 응답이 실제로 존재하는가',1],['문장 속 숫자가 집계와 같은가',1],
+    ['인용이 이 주장을 뒷받침하는가',1],['사람이 정한 기준을 통과했는가',0],['개인이 드러날 위험이 없는가',1]],
+  conf:[['응답 수가 충분한가',54],['의견 방향이 일치하는가',76],['인용이 주장을 뒷받침하는가',72],
+    ['작년과 비교 가능한가',0],['사람이 정한 기준으로 판단했는가',70]],
+  facts:[{l:'이 주제를 말한 사람 수',v:'97명',d:{t:'이 주제를 말한 사람 수',big:'97',unit:'명 / 응답자 862명',
+    cond:'35·39_문항에서 회의·보고 부담을 언급한 사람입니다.',
+    rows:[['35_문항에서 언급','61명','7.1%'],['39_문항에서 언급','44명','5.1%'],
+      ['중복 제외','97명','11.3%'],['정식 기준','100명 이상','미달']],
+    note:'3명 차이로 기준에 못 미쳐 참고용으로 분류되었습니다.',
+    rerun:'2026-08-11 10:18 다시 계산 · 같은 값 확인'}}],
+  list:{count:97,pool:'meet',label:'이 주제로 분류된 응답',mixQ:true,note:'인원이 5명 미만인 팀의 응답은 제외했습니다.'},
+  tech:[['insight_id','ins_2297'],['theme_id','thm_0140'],['origin','llm_proposed (규칙 미통과)']]},
+
+ i4:{claim:'팀 안에서 서로 돕는 문화가 강점으로 반복해서 언급되었습니다',
+  cards:[['이렇게 말한 사람','268<small>명</small>'],['긍정적 의견','77<small>%</small>'],['판단 신뢰도','높음<small> 0.83</small>']],
+  how:['<b>268명(31.1%)</b>이 이 내용을 강점으로 꼽았습니다.',
+    '언급의 <b>77%가 긍정적</b>이어서 다른 주제와 성격이 뚜렷하게 다릅니다.',
+    '객관식에서도 <b>실행·책임 영역이 4.05점</b>으로 가장 높아 같은 방향입니다.',
+    '협업 문제가 부서 사이에 몰려 있다는 점과 함께 보면 개선 범위를 좁힐 수 있습니다.'],
+  rule:'“강점”으로 쓰려면 아래를 만족해야 합니다.',
+  ruleItems:[['긍정 의견 60% 이상','77%',1],['최소 20명 이상 언급','268명',1]],
+  checks:[['인용한 응답이 실제로 존재하는가',1],['문장 속 숫자가 집계와 같은가',1],
+    ['인용이 이 주장을 뒷받침하는가',1],['객관식 결과와 방향이 같은가',1],['개인이 드러날 위험이 없는가',1]],
+  conf:[['응답 수가 충분한가',90],['의견 방향이 일치하는가',77],['인용이 주장을 뒷받침하는가',91],
+    ['객관식과 방향이 맞는가',88],['사람이 정한 기준으로 판단했는가',100]],
+  facts:[
+   {l:'이 주제를 말한 사람 수',v:'268명',d:{t:'이 주제를 말한 사람 수',big:'268',unit:'명 / 응답자 862명',
+    cond:'38·32_문항에서 강점으로 언급한 사람입니다.',
+    rows:[['38_문항 (잘하는 점)','156명','18.1%'],['32_문항 (보람 있던 경험)','112명','13.0%'],
+      ['중복 제외','268명','31.1%']],rerun:'2026-08-11 10:19 다시 계산 · 같은 값 확인'}},
+   {l:'긍정적인 의견 비율',v:'77%',d:{t:'의견의 성격',big:'77',unit:'% 긍정적',cond:'응답 조각 268개 기준입니다.',
+    dist:[['긍정',206,77],['보통',46,17],['부정',16,6]],distTitle:'성격별 건수',
+    rerun:'2026-08-11 10:19 다시 계산 · 같은 값 확인'}}],
+  list:{count:268,pool:'team',label:'이 주제로 분류된 응답',mixQ:true,note:'인원이 5명 미만인 팀의 응답은 제외했습니다.'},
+  tech:[['insight_id','ins_2302'],['theme_id','thm_0108'],['rule','strength_v1@1.0']]},
+
+ i5:{claim:'객관식 소통·논의 점수가 6개 영역 중 유일하게 의미 있게 떨어졌습니다',
+  cards:[['영역 평균','3.38<small>점</small>'],['작년 대비','−0.25<small>점</small>'],['판단 신뢰도','높음<small> 0.81</small>']],
+  how:['소통·논의 영역 <b>6개 문항</b>의 평균이 3.63점에서 <b>3.38점</b>으로 내려갔습니다.',
+    '6개 문항이 <b>모두 하락</b>했습니다. 한 문항 때문이 아니라 영역 전체의 흐름입니다.',
+    '가장 낮은 문항은 “회의 참가자들이 골고루 발언하는 것이 일상적이다”로 <b>3.21점</b>(작년 3.52)입니다.',
+    '같은 시기 주관식에서는 협업 문제 언급이 14.2%p 늘어, <b>두 방식의 결과가 같은 방향</b>입니다.'],
+  rule:'“의미 있게 떨어졌다”는 아래를 모두 만족할 때 씁니다.',
+  ruleItems:[['0.15점 이상 하락','0.25점',1],['영역에 3문항 이상 포함','6문항',1],['우연일 확률 5% 미만','0.4%',1]],
+  checks:[['인용한 숫자가 집계와 같은가',1],['문항들이 같은 방향으로 움직였는가',1],
+    ['주관식 결과와 방향이 같은가',1],['과장된 표현이 아닌가',1],['개인이 드러날 위험이 없는가',1]],
+  conf:[['응답 수가 충분한가',100],['문항들이 일관되게 움직였는가',84],['근거가 주장을 뒷받침하는가',79],
+    ['우연이라 보기 어려운가',86],['사람이 정한 기준으로 판단했는가',100]],
+  facts:[],
+  list:{count:312,pool:'coop',label:'같은 방향을 가리킨 주관식 응답',mixQ:true,
+    note:'객관식 문항에는 글로 쓴 응답이 없습니다. 대신 같은 기간 주관식에서 협업 문제를 언급한 응답을 교차 근거로 보여줍니다. 각 문항의 점수 응답은 3절 문항별 표에서 문항을 클릭해 보실 수 있습니다.'},
+  tech:[['insight_id','ins_2310'],['area','소통·논의 (6문항)'],['rule','score_drop_v1@1.0'],
+    ['cross_check','주관식 +14.2%p → 상호 확인']]}
+};
+
+/* i5의 근거 숫자는 문항 데이터에서 직접 만든다 */
+(function(){
+  const A=AREAS.find(a=>a.k==='소통·논의'),qs=Q5.filter(q=>q.area==='소통·논의');
+  EV.i5.cards[0][1]=A.avg.toFixed(2)+'<small>점</small>';
+  EV.i5.cards[1][1]=(A.avg-A.prev).toFixed(2)+'<small>점</small>';
+  const q14=Q5.find(q=>q.no===14);
+  EV.i5.facts=[
+   {l:'소통·논의 영역 평균',v:A.avg.toFixed(2)+'점',
+    d:{t:'소통·논의 영역 문항별 점수',big:A.avg.toFixed(2),unit:'/ 5점 · 6문항 평균',
+       cond:'862명 전원이 응답했습니다. 빠진 응답은 없습니다.',
+       rows:qs.map(q=>[q.t.length>28?q.t.slice(0,28)+'…':q.t,q.real.toFixed(2),(q.d>0?'+':'')+q.d.toFixed(2)]),
+       note:'6개 문항이 모두 내려갔습니다. 방향이 일치해 신뢰도가 높게 산출되었습니다.',
+       rerun:'2026-08-11 10:21 다시 계산 · 같은 값 확인'}},
+   {l:'가장 낮은 문항 · 골고루 발언',v:q14.real.toFixed(2)+'점',
+    d:{t:'“'+q14.t+'”',big:q14.real.toFixed(2),unit:'/ 5점 · 작년 '+q14.prev.toFixed(2),
+       cond:'응답자 862명이 1~5점 중 하나를 골랐습니다.',
+       dist:[5,4,3,2,1].map(s=>[s+'점',q14.c[s-1],Math.round(q14.c[s-1]/N*100)]),distTitle:'몇 점을 줬나 (명)',
+       rows:[['긍정 (4~5점)',(q14.c[3]+q14.c[4])+'명',Math.round((q14.c[3]+q14.c[4])/N*100)+'%'],
+             ['부정 (1~2점)',(q14.c[0]+q14.c[1])+'명',Math.round((q14.c[0]+q14.c[1])/N*100)+'%'],
+             ['평균',q14.real.toFixed(2),'작년 대비 '+q14.d.toFixed(2)]],
+       rerun:'2026-08-11 10:21 다시 계산 · 같은 값 확인',qno:14}},
+   {l:'영역 전체 부정 응답 비율',v:A.s[0]+'%',
+    d:{t:'소통·논의 영역 응답 분포',big:A.s[0],unit:'% 부정',
+       cond:'6문항 × 862명 = '+A.total.toLocaleString()+'개 응답을 모두 합쳤습니다.',
+       dist:[['긍정 (4~5점)',A.counts[2],A.s[2]],['보통 (3점)',A.counts[1],A.s[1]],['부정 (1~2점)',A.counts[0],A.s[0]]],
+       distTitle:'응답 구간별 건수',rerun:'2026-08-11 10:21 다시 계산 · 같은 값 확인'}}];
+})();
+
+/* ══════════ 차트 ══════════ */
+const NS='http://www.w3.org/2000/svg',tip=document.getElementById('tip');
+function mk(t,a){const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);return e}
+function bindTip(el,html){
+  el.addEventListener('mousemove',e=>{tip.innerHTML=html;tip.style.opacity=1;
+    tip.style.left=Math.min(e.clientX+14,innerWidth-250)+'px';tip.style.top=Math.max(e.clientY-8,8)+'px'});
+  el.addEventListener('mouseleave',()=>tip.style.opacity=0)}
+function hbar(x,y,w,h,r,dir){r=Math.min(r,Math.abs(w));
+  return dir>0?`M${x},${y} h${w-r} a${r},${r} 0 0 1 ${r},${r} v${h-2*r} a${r},${r} 0 0 1 ${-r},${r} h${-(w-r)} z`
+              :`M${x},${y} h${-(w-r)} a${r},${r} 0 0 0 ${-r},${r} v${h-2*r} a${r},${r} 0 0 0 ${r},${r} h${w-r} z`}
+function tbl(h,r){return '<table><thead><tr>'+h+'</tr></thead><tbody>'+r+'</tbody></table>'}
+
+cap('k-all').innerHTML=ALLAVG.toFixed(2)+'<small>/5</small>';
+cap('cap-neg').textContent=AREAS.find(a=>a.k==='소통·논의').s[0]+'%';
+
+(function(){const svg=cap('c1'),W=680,RH=36,LX=104,BX=LX+12,MAXW=W-BX-52;
+  const H=AREAS.length*RH+24,MIN=3.0,MAX=4.4,sc=v=>(v-MIN)/(MAX-MIN)*MAXW;
+  svg.setAttribute('viewBox',`0 0 ${W} ${H}`);
+  [3.0,3.5,4.0,4.4].forEach(v=>{const x=BX+sc(v);
+    svg.appendChild(mk('line',{x1:x,y1:0,x2:x,y2:H-22,stroke:'var(--line-2)','stroke-width':1}));
+    const t=mk('text',{x,y:H-6,'text-anchor':'middle',fill:'var(--ink-3)','font-size':10.5,
+      'font-variant-numeric':'tabular-nums'});t.textContent=v.toFixed(1);svg.appendChild(t)});
+  AREAS.forEach((a,i)=>{const y=i*RH+5,w=sc(a.avg);
+    const lb=mk('text',{x:LX,y:y+16,'text-anchor':'end',fill:'var(--ink-2)','font-size':12.5});
+    lb.textContent=a.k;svg.appendChild(lb);
+    const b=mk('path',{d:hbar(BX,y+4,w,15,4,1),fill:'var(--series-1)'});svg.appendChild(b);
+    const px=BX+sc(a.prev);
+    svg.appendChild(mk('line',{x1:px,y1:y,x2:px,y2:y+23,stroke:'var(--ink-3)','stroke-width':2}));
+    const v=mk('text',{x:BX+w+9,y:y+16,fill:'var(--ink)','font-size':12.5,'font-weight':700,
+      'font-variant-numeric':'tabular-nums'});v.textContent=a.avg.toFixed(2);svg.appendChild(v);
+    const d=(a.avg-a.prev).toFixed(2);
+    bindTip(b,`<b>${a.k}</b> (${a.q}문항)<br>올해 ${a.avg.toFixed(2)} · 작년 ${a.prev.toFixed(2)}<br>변화 ${d>0?'+':''}${d}`)});
+  cap('c1t').innerHTML=tbl('<th>영역</th><th class="n">문항</th><th class="n">올해</th><th class="n">작년</th><th class="n">변화</th>',
+    AREAS.map(a=>`<tr><td>${a.k}</td><td class="n">${a.q}</td><td class="n">${a.avg.toFixed(2)}</td>`+
+      `<td class="n">${a.prev.toFixed(2)}</td><td class="n">${(a.avg-a.prev>0?'+':'')+(a.avg-a.prev).toFixed(2)}</td></tr>`).join(''))})();
+
+(function(){const svg=cap('c2'),W=680,RH=30,LX=104,BX=LX+12,MAXW=W-BX-16;
+  /* 표시 순서: 긍정 → 보통 → 부정 (s 배열은 [부정,보통,긍정]이므로 인덱스 역순) */
+  const ORD=[2,1,0],C={2:['긍정','var(--pos)','#fff'],1:['보통','var(--mid)','var(--ink)'],0:['부정','var(--neg)','#fff']};
+  const H=AREAS.length*RH+4;
+  svg.setAttribute('viewBox',`0 0 ${W} ${H}`);
+  AREAS.forEach((a,i)=>{const y=i*RH+4;
+    const lb=mk('text',{x:LX,y:y+15,'text-anchor':'end',fill:'var(--ink-2)','font-size':12.5});
+    lb.textContent=a.k;svg.appendChild(lb);let cx=BX;
+    ORD.forEach(si=>{const val=a.s[si],w=val/100*MAXW-2;
+      const r=mk('rect',{x:cx,y:y+3,width:Math.max(w,1),height:14,rx:2,fill:C[si][1]});svg.appendChild(r);
+      bindTip(r,`<b>${a.k}</b><br>${C[si][0]} ${val}% · ${a.counts[si].toLocaleString()}건`);
+      if(val>=13){const t=mk('text',{x:cx+6,y:y+14,'font-size':10.5,'font-weight':700,fill:C[si][2],
+        'font-variant-numeric':'tabular-nums'});t.textContent=val;svg.appendChild(t)}cx+=w+2})});
+  cap('c2t').innerHTML=tbl('<th>영역</th><th class="n">긍정</th><th class="n">보통</th><th class="n">부정</th>',
+    AREAS.map(a=>`<tr><td>${a.k}</td><td class="n">${a.s[2]}%</td><td class="n">${a.s[1]}%</td><td class="n">${a.s[0]}%</td></tr>`).join(''))})();
+
+(function(){const svg=cap('c3'),W=680,RH=32,LX=210,BX=LX+12,MAXW=W-BX-50;
+  const H=THEMES.length*RH+24,max=40;svg.setAttribute('viewBox',`0 0 ${W} ${H}`);
+  [0,10,20,30,40].forEach(v=>{const x=BX+v/max*MAXW;
+    svg.appendChild(mk('line',{x1:x,y1:0,x2:x,y2:H-22,stroke:'var(--line-2)','stroke-width':1}));
+    const t=mk('text',{x,y:H-6,'text-anchor':'middle',fill:'var(--ink-3)','font-size':10.5,
+      'font-variant-numeric':'tabular-nums'});t.textContent=v;svg.appendChild(t)});
+  THEMES.forEach((t,i)=>{const y=i*RH+4,w=t.p/max*MAXW;
+    const lb=mk('text',{x:LX,y:y+15,'text-anchor':'end',fill:'var(--ink-2)','font-size':12.5});
+    lb.textContent=t.k;svg.appendChild(lb);
+    const b=mk('path',{d:hbar(BX,y+3,w,14,4,1),fill:'var(--series-1)'});svg.appendChild(b);
+    const v=mk('text',{x:BX+w+9,y:y+15,fill:'var(--ink)','font-size':12.5,'font-weight':700,
+      'font-variant-numeric':'tabular-nums'});v.textContent=t.p.toFixed(1);svg.appendChild(v);
+    bindTip(b,`<b>${t.k}</b><br>${t.n}명 · ${t.p}%<br>작년 ${t.prev===null?'없음':t.prev+'%'}`)});
+  cap('c3t').innerHTML=tbl('<th>주제</th><th class="n">인원</th><th class="n">언급률</th><th class="n">작년</th>',
+    THEMES.map(t=>`<tr><td>${t.k}</td><td class="n">${t.n}</td><td class="n">${t.p}%</td>`+
+      `<td class="n">${t.prev===null?'없음':t.prev+'%'}</td></tr>`).join(''))})();
+
+cap('ttab').innerHTML=THEMES.map(t=>`
+  <tr><td>${t.k}</td><td class="n">${t.n}</td><td class="n">${t.p}%</td>
+  <td class="n">${t.d===null?'신규':(t.d>0?'+':'')+t.d+'%p'}</td>
+  <td><div class="mini"><span style="width:${t.s[2]}%;background:var(--pos)"></span>
+    <span style="width:${t.s[1]}%;background:var(--mid)"></span>
+    <span style="width:${t.s[0]}%;background:var(--neg)"></span></div>
+    <span class="note" style="margin:4px 0 0">긍정 ${t.s[2]} · 보통 ${t.s[1]} · 부정 ${t.s[0]}</span></td></tr>`).join('');
+
+(function(){const D=THEMES.filter(t=>t.d!==null),svg=cap('c4');
+  const W=680,RH=32,LX=210,ZERO=LX+130,MAXW=140,max=15,H=D.length*RH+26;
+  svg.setAttribute('viewBox',`0 0 ${W} ${H}`);
+  D.forEach((t,i)=>{const y=i*RH+4,w=Math.abs(t.d)/max*MAXW,dir=t.d>0?1:-1;
+    const lb=mk('text',{x:LX,y:y+15,'text-anchor':'end',fill:'var(--ink-2)','font-size':12.5});
+    lb.textContent=t.k;svg.appendChild(lb);
+    const b=mk('path',{d:hbar(ZERO,y+4,dir*w,14,4,dir),fill:dir>0?'var(--neg)':'var(--pos)'});svg.appendChild(b);
+    const v=mk('text',{x:ZERO+dir*(w+8),y:y+15,'text-anchor':dir>0?'start':'end',fill:'var(--ink)',
+      'font-size':12.5,'font-weight':700,'font-variant-numeric':'tabular-nums'});
+    v.textContent=(t.d>0?'+':'')+t.d;svg.appendChild(v);
+    bindTip(b,`<b>${t.k}</b><br>작년 ${t.prev}% → 올해 ${t.p}%`)});
+  svg.appendChild(mk('line',{x1:ZERO,y1:0,x2:ZERO,y2:H-20,stroke:'var(--ink-3)','stroke-width':1}));
+  const zt=mk('text',{x:ZERO,y:H-6,'text-anchor':'middle',fill:'var(--ink-3)','font-size':10.5});
+  zt.textContent='0';svg.appendChild(zt);
+  cap('c4t').innerHTML=tbl('<th>주제</th><th class="n">작년</th><th class="n">올해</th><th class="n">변화</th>',
+    D.map(t=>`<tr><td>${t.k}</td><td class="n">${t.prev}%</td><td class="n">${t.p}%</td>`+
+      `<td class="n">${(t.d>0?'+':'')+t.d}%p</td></tr>`).join(''))})();
+
+(function(){const svg=cap('c5'),W=680,H=250,L=38,R=152,T=14,B=30;
+  const PW=W-L-R,PH=H-T-B,max=40,X=i=>L+i*(PW/(TREND.x.length-1)),Y=v=>T+PH-v/max*PH;
+  svg.setAttribute('viewBox',`0 0 ${W} ${H}`);
+  [0,10,20,30,40].forEach(v=>{const y=Y(v);
+    svg.appendChild(mk('line',{x1:L,y1:y,x2:L+PW,y2:y,stroke:'var(--line-2)','stroke-width':1}));
+    const t=mk('text',{x:L-8,y:y+4,'text-anchor':'end',fill:'var(--ink-3)','font-size':10.5,
+      'font-variant-numeric':'tabular-nums'});t.textContent=v;svg.appendChild(t)});
+  TREND.x.forEach((lx,i)=>{const t=mk('text',{x:X(i),y:H-10,'text-anchor':'middle',fill:'var(--ink-3)','font-size':11});
+    t.textContent=lx;svg.appendChild(t)});
+  TREND.s.forEach(s=>{
+    svg.appendChild(mk('path',{d:s.v.map((v,i)=>`${i?'L':'M'}${X(i)},${Y(v)}`).join(' '),fill:'none',
+      stroke:s.c,'stroke-width':2,'stroke-linecap':'round','stroke-linejoin':'round'}));
+    s.v.forEach((v,i)=>{svg.appendChild(mk('circle',{cx:X(i),cy:Y(v),r:4.5,fill:'#fff',stroke:s.c,'stroke-width':2}));
+      const hit=mk('circle',{cx:X(i),cy:Y(v),r:12,fill:'transparent'});
+      bindTip(hit,`<b>${s.k}</b><br>${TREND.x[i]} · ${v}%`);svg.appendChild(hit)});
+    const l=s.v.length-1;
+    const lab=mk('text',{x:X(l)+11,y:Y(s.v[l])+3,fill:'var(--ink-2)','font-size':11.5});
+    lab.textContent=s.k;svg.appendChild(lab);
+    const val=mk('text',{x:X(l)+11,y:Y(s.v[l])+18,fill:'var(--ink)','font-size':11.5,'font-weight':700,
+      'font-variant-numeric':'tabular-nums'});val.textContent=s.v[l]+'%';svg.appendChild(val)});
+  svg.appendChild(mk('line',{x1:L,y1:T+PH,x2:L+PW,y2:T+PH,stroke:'var(--line)','stroke-width':1}));
+  cap('c5t').innerHTML=tbl('<th>주제</th>'+TREND.x.map(x=>`<th class="n">${x}</th>`).join(''),
+    TREND.s.map(s=>`<tr><td>${s.k}</td>`+s.v.map(v=>`<td class="n">${v}%</td>`).join('')+'</tr>').join(''))})();
+
+/* ══════════ 문항별 표 ══════════ */
+(function(){
+  const low=[...Q5].sort((a,b)=>a.real-b.real).slice(0,5);
+  cap('low5').innerHTML=low.map(q=>`<tr class="qrow" data-q5="${q.no}">
+    <td><span class="qnum">${q.no}</span>${q.t.length>40?q.t.slice(0,40)+'…':q.t}</td>
+    <td>${q.area}</td><td class="n"><b>${q.real.toFixed(2)}</b></td>
+    <td class="n">${q.prev.toFixed(2)}</td>
+    <td class="n" style="color:${q.d<0?'var(--neg)':'var(--good)'}">${(q.d>0?'+':'')+q.d.toFixed(2)}</td></tr>`).join('');
+  const cnt={};low.forEach(q=>cnt[q.area]=(cnt[q.area]||0)+1);
+  const top=Object.entries(cnt).sort((a,b)=>b[1]-a[1])[0];
+  cap('low5note').textContent=`낮은 5문항 중 ${top[1]}개가 ${top[0]} 영역입니다. 각 행을 클릭하면 응답 862건을 볼 수 있습니다.`;
+})();
+
+cap('q5tab').innerHTML=AREA_ORDER.map(area=>{
+  const rows=Q5.filter(q=>q.area===area).sort((a,b)=>a.no-b.no);
+  return `<tr><td colspan="5" class="arealab">${area} · ${rows.length}문항</td></tr>`+
+   rows.map(q=>`<tr class="qrow" data-q5="${q.no}">
+     <td><span class="qnum">${q.no}</span>${q.t.length>44?q.t.slice(0,44)+'…':q.t}</td>
+     <td class="n"><b>${q.real.toFixed(2)}</b></td><td class="n">${q.prev.toFixed(2)}</td>
+     <td class="n" style="color:${q.d<0?'var(--neg)':'var(--good)'}">${(q.d>0?'+':'')+q.d.toFixed(2)}</td>
+     <td><div class="mini"><span style="width:${q.pos}%;background:var(--pos)"></span>
+       <span style="width:${q.mid}%;background:var(--mid)"></span>
+       <span style="width:${q.neg}%;background:var(--neg)"></span></div>
+       <span class="note" style="margin:4px 0 0">긍정 ${q.pos} · 보통 ${q.mid} · 부정 ${q.neg}</span></td></tr>`).join('');
+}).join('');
+
+cap('qttab').innerHTML=QT.map(q=>`<tr class="qrow" data-qt="${q.no}">
+  <td><span class="qnum">${q.no}</span>${q.t.length>40?q.t.slice(0,40)+'…':q.t}
+    ${q.req?'<span class="tag" style="margin-left:6px">필수</span>':''}</td>
+  <td class="n"><b>${q.resp.toLocaleString()}</b></td>
+  <td class="n">${(q.resp/N*100).toFixed(1)}%</td>
+  <td>${q.themes.map(t=>`${t[0]}&nbsp;<span class="note" style="display:inline;margin:0;white-space:nowrap">${t[1]}건</span>`).join('<br>')}</td></tr>`).join('');
+
+/* ══════════ 팝업 ══════════ */
+const modal=cap('modal'),scrim=cap('scrim');
+let CUR=null,lastFocus=null;
+
+function rpPad(h){cap('m-right').innerHTML='<div class="rp-pad">'+h+'</div>'}
+function rpDetail(d){
+  let h=`<div class="rp-t">${d.t}</div><div class="rp-cond">${d.cond||''}</div>`;
+  if(d.big!==undefined)h+=`<div class="big">${d.big}<small>${d.unit||''}</small></div>`;
+  if(d.dist){const mx=Math.max(...d.dist.map(r=>r[1]));
+    h+=`<div class="rp-sub">${d.distTitle||'응답 분포'}</div>`+
+      d.dist.map(r=>`<div class="drow"><span class="dk">${r[0]}</span>
+        <span class="db"><i style="width:${r[1]/mx*100}%"></i></span>
+        <span class="dn"><b>${r[1].toLocaleString()}</b>건 · ${r[2]}%</span></div>`).join('')}
+  if(d.rows)h+=`<div class="rp-sub">계산 내역</div><table>`+
+    d.rows.map(r=>`<tr><td>${r[0]}</td><td class="n">${r[1]}</td><td class="n">${r[2]||''}</td></tr>`).join('')+`</table>`;
+  if(d.note)h+=`<p class="note">${d.note}</p>`;
+  if(d.rerun)h+=`<div class="rerun"><b>검증</b> ${d.rerun}</div>`;
+  h+=`<div class="btnrow">`+
+     (d.qno?`<button class="btn" data-go="${d.qno}">이 문항 응답 862건 보기</button>`:
+            `<button class="btn" data-act="list">근거가 된 응답 전체 보기</button>`)+
+     `<button class="btn">숫자가 이상하다고 신고</button></div>`;
+  rpPad(h);
+  const a=document.querySelector('[data-act="list"]');if(a)a.addEventListener('click',()=>rpList());
+  const g=document.querySelector('[data-go]');if(g)g.addEventListener('click',()=>openQ5(+g.dataset.go));
+}
+
+function rpList(){
+  const L=CUR.list;
+  const rows=L.kind==='score'?buildScoreList(L.q):buildTextList(L.pool,L.count,L.qlabel||null);
+  const isScore=L.kind==='score';
+  cap('m-right').innerHTML=`
+    <div class="list-head">
+      <div class="list-title">${L.label} 전체 ${L.count.toLocaleString()}건</div>
+      <div class="list-sub">${L.sub||'이 판단의 바탕이 된 응답입니다. 노란 부분이 주제로 분류된 대목이며, 응답 아래 주제 표시를 누르면 그 주제의 응답만 모아 볼 수 있습니다.'}</div>
+      <div class="tools">
+        ${isScore?'':'<input class="search" id="lq" placeholder="응답 내용 검색…" autocomplete="off">'}
+        <button class="chip on" data-f="all">전체</button>
+        ${isScore?[5,4,3,2,1].map(s=>`<button class="chip" data-f="${s}">${s}점</button>`).join('')
+                 :['긍정','보통','부정'].map(s=>`<button class="chip" data-f="${s}">${s}</button>`).join('')}
+      </div>
+      <div class="tools">
+        ${DEMOS.map(d=>`<select class="dsel" data-d="${d[0]}">
+          <option value="">${d[1]} 전체</option>
+          ${d[2].map(o=>`<option>${o}</option>`).join('')}</select>`).join('')}
+      </div>
+      <div class="list-count" id="lc"></div>
+    </div>
+    <div class="list-body" id="lb"></div>`;
+  let f='all',q='',tf=null;
+  const df={role:'',age:'',ten:'',gen:'',hire:''};
+  const draw=()=>{
+    const rs=rows.filter(r=>(f==='all'||(isScore?String(r.score)===f:r.senti===f))
+                         &&(!q||((r.txt||'')+(r.tail||'')).includes(q))
+                         &&(!tf||(r.themes&&r.themes.includes(tf)))
+                         &&(!df.role||r.role===df.role)&&(!df.age||r.age===df.age)
+                         &&(!df.ten||r.ten===df.ten)&&(!df.gen||r.gen===df.gen)
+                         &&(!df.hire||r.hire===df.hire));
+    const demoOn=Object.values(df).some(v=>v);
+    const blocked=rs.length>0&&rs.length<5;   /* ★ 조합 결과 k=5 미만이면 표시 차단 (D5) */
+    cap('lc').innerHTML=(blocked?`<b>5건 미만</b>`:`${rs.length.toLocaleString()}건 표시 중`)
+      +` · 전체 ${rows.length.toLocaleString()}건`
+      +(tf?` · 주제 <b>${esc(tf)}</b>만 표시 <button class="tchip on" data-t="${esc(tf)}" style="margin-left:4px">해제 ✕</button>`:'');
+    if(blocked){
+      cap('lb').innerHTML=`<div class="kblock"><b>표시할 수 없습니다</b>
+        선택하신 조건에 해당하는 응답이 5건 미만입니다.<br>
+        개인이 특정될 수 있어 목록과 정확한 건수를 제공하지 않습니다 (익명성 보호 기준 k=5).<br>
+        조건을 하나 줄여서 다시 시도해 주세요.</div>`;
+      return;
+    }
+    cap('lb').innerHTML=rs.map(r=>isScore
+      ? `<div class="ritem"><div class="rno">${r.no}</div><div>
+           <div class="rtx"><span class="score" style="background:${SCORE_COLOR[r.score]}">${r.score}</span>
+             <span style="margin-left:8px;color:var(--ink-2)">${['전혀 그렇지 않다','그렇지 않다','보통이다','그렇다','매우 그렇다'][r.score-1]}</span></div>
+           <div class="rmeta"><span>${r.role}</span><span>·</span><span>${r.age}</span>
+             <span>·</span><span>근속 ${r.ten}</span><span>·</span><span>익명</span></div></div></div>`
+      : `<div class="ritem"><div class="rno">${r.no}</div><div>
+           <div class="rtx"><mark>${esc(r.txt)}</mark>${esc(r.tail)}</div>
+           <div class="rmeta"><span><span class="sdot" style="background:${SC[r.senti]}"></span>${r.senti}</span>
+             ${r.q?'<span>·</span><span>'+r.q+'</span>':''}<span>·</span><span>${r.role}</span>
+             <span>·</span><span>${r.age}</span><span>·</span><span>근속 ${r.ten}</span>
+             <span>·</span><span>익명</span></div>
+           ${r.themes&&r.themes.length?`<div class="rthemes">${r.themes.map(t=>
+             `<button class="tchip${t===tf?' on':''}" data-t="${esc(t)}">${esc(t)}</button>`).join('')}</div>`:''}
+         </div></div>`).join('')
+      +`<div class="list-note">${L.note}${demoOn?' 응답자 구성 조건을 조합해 5건 미만이 되면 목록이 가려집니다.':''}</div>`;
+  };
+  const s=cap('lq');if(s)s.addEventListener('input',e=>{q=e.target.value.trim();draw()});
+  document.querySelectorAll('.chip').forEach(c=>c.addEventListener('click',()=>{
+    document.querySelectorAll('.chip').forEach(x=>x.classList.remove('on'));
+    c.classList.add('on');f=c.dataset.f;draw()}));
+  document.querySelectorAll('.dsel').forEach(sel=>sel.addEventListener('change',()=>{
+    df[sel.dataset.d]=sel.value;draw()}));
+  /* 주제 표시 클릭 → 그 주제만 모아보기 (다시 누르면 해제) */
+  cap('m-right').addEventListener('click',e=>{
+    const c=e.target.closest('.tchip');if(!c)return;
+    tf=(tf===c.dataset.t?null:c.dataset.t);draw()});
+  draw();
+}
+
+/* ── 응답자 구성별 비교 표 ── */
+function rpCompare(){
+  const L=CUR.list,isScore=L.kind==='score';
+  const rows=isScore?buildScoreList(L.q):buildTextList(L.pool,L.count,L.qlabel||null);
+  cap('m-right').innerHTML=`
+    <div class="list-head">
+      <div class="list-title">응답자 구성별 비교</div>
+      <div class="list-sub">${isScore
+        ?'구성별 평균 점수와 응답 분포를 비교합니다.'
+        :'구성별 응답 수와 의견 성격(부정·보통·긍정)을 비교합니다.'}
+        인원 5명 미만 구간은 개인이 특정될 수 있어 값을 표시하지 않습니다 (k=5).</div>
+      <div class="tools" id="dimrow">
+        ${DEMOS.map((d,i)=>`<button class="chip${i===0?' on':''}" data-dim="${d[0]}">${d[1]}</button>`).join('')}
+      </div>
+      <div class="list-count" id="lc"></div>
+    </div>
+    <div class="list-body" id="lb"></div>`;
+  let dim='role';
+  const mini=(neg,mid,pos)=>`<div class="mini" style="min-width:70px">
+    <span style="width:${pos}%;background:var(--pos)"></span>
+    <span style="width:${mid}%;background:var(--mid)"></span>
+    <span style="width:${neg}%;background:var(--neg)"></span></div>`;
+  const rowHtml=(label,rs,strong)=>{
+    const n=rs.length;
+    if(n>0&&n<5)return `<tr class="maskrow"><td>${label}</td><td class="n">5명 미만</td>
+      <td colspan="${isScore?5:4}">비공개 — 개인 특정 위험</td></tr>`;
+    if(isScore){
+      const avg=n?rs.reduce((a,r)=>a+r.score,0)/n:0;
+      const neg=n?Math.round(rs.filter(r=>r.score<=2).length/n*100):0;
+      const mid=n?Math.round(rs.filter(r=>r.score===3).length/n*100):0;
+      const pos=n?100-neg-mid:0;
+      return `<tr${strong?' style="font-weight:700;border-bottom:1px solid var(--line)"':''}>
+        <td>${label}</td><td class="n">${n?n.toLocaleString():'0'}</td>
+        <td class="n">${n?avg.toFixed(2):'—'}</td>
+        <td class="n">${n?pos+'%':'—'}</td><td class="n">${n?mid+'%':'—'}</td><td class="n">${n?neg+'%':'—'}</td>
+        <td>${n?mini(neg,mid,pos):''}</td></tr>`;
+    }
+    const c={부정:0,보통:0,긍정:0};rs.forEach(r=>c[r.senti]++);
+    const neg=n?Math.round(c['부정']/n*100):0,mid=n?Math.round(c['보통']/n*100):0;
+    const pos=n?100-neg-mid:0;
+    return `<tr${strong?' style="font-weight:700;border-bottom:1px solid var(--line)"':''}>
+      <td>${label}</td><td class="n">${n?n.toLocaleString():'0'}</td>
+      <td class="n">${n?pos+'%':'—'}</td><td class="n">${n?mid+'%':'—'}</td><td class="n">${n?neg+'%':'—'}</td>
+      <td>${n?mini(neg,mid,pos):''}</td></tr>`;
+  };
+  const draw=()=>{
+    const spec=DEMOS.find(d=>d[0]===dim);
+    cap('lc').textContent=`${spec[1]} 기준 · 전체 ${rows.length.toLocaleString()}건`;
+    cap('lb').innerHTML=`<table>
+      <thead><tr><th>${spec[1]}</th><th class="n">${isScore?'인원':'응답'}</th>
+        ${isScore?'<th class="n">평균</th>':''}
+        <th class="n">긍정</th><th class="n">보통</th><th class="n">부정</th><th>분포</th></tr></thead>
+      <tbody>${rowHtml('전체',rows,true)}
+        ${spec[2].map(g=>rowHtml(g,rows.filter(r=>r[dim]===g))).join('')}</tbody></table>
+      <p class="note">두 가지 이상 조건을 겹친 확인은 ‘응답 전체 보기’의 필터를 조합해 사용하세요.
+        조합 결과가 5건 미만이면 목록이 가려집니다.</p>`;
+  };
+  document.querySelectorAll('#dimrow .chip').forEach(c=>c.addEventListener('click',()=>{
+    document.querySelectorAll('#dimrow .chip').forEach(x=>x.classList.remove('on'));
+    c.classList.add('on');dim=c.dataset.dim;draw()}));
+  draw();
+}
+
+function renderLeft(m){
+  cap('m-left').innerHTML=`
+    <div class="m-eyebrow">${m.eyebrow}</div>
+    <div class="m-claim">${m.title}</div>
+    <div class="cards">${m.cards.map(c=>`<div class="card"><div class="ck">${c[0]}</div><div class="cv">${c[1]}</div></div>`).join('')}</div>
+    ${m.how?`<div class="m-sec">어떻게 이런 결론이 나왔나</div><ol class="steps">${m.how.map(s=>`<li>${s}</li>`).join('')}</ol>`:''}
+    ${m.rule?`<div class="m-sec">판단 기준</div><p class="note" style="margin:0 0 8px">${m.rule}</p>
+      <ul class="checks">${m.ruleItems.map(r=>`<li><span class="${r[2]?'ok':'no'}">${r[2]?'✓':'✕'}</span>
+        <span>${r[0]}<b style="color:var(--ink)"> — ${r[1]}</b></span></li>`).join('')}</ul>`:''}
+    ${m.checks?`<div class="m-sec">발행 전 확인 절차</div><ul class="checks">${m.checks.map(c=>
+      `<li><span class="${c[1]?'ok':'no'}">${c[1]?'✓':'!'}</span><span>${c[0]}</span></li>`).join('')}</ul>`:''}
+    ${m.conf?`<div class="m-sec">신뢰도를 이렇게 계산했습니다</div>`+m.conf.map(c=>
+      `<div style="font-size:12.5px;color:var(--ink-2);display:flex;justify-content:space-between">
+        <span>${c[0]}</span><span style="font-variant-numeric:tabular-nums">${c[1]}%</span></div>
+       <div style="height:4px;background:var(--line-2);border-radius:99px;overflow:hidden;margin:3px 0 8px">
+        <i style="display:block;height:100%;width:${c[1]}%;background:var(--accent)"></i></div>`).join(''):''}
+    ${m.info?`<div class="m-sec">${m.infoTitle||'자세히'}</div><table>`+
+      m.info.map(r=>`<tr><td>${r[0]}</td><td class="n">${r[1]}</td><td class="n">${r[2]||''}</td></tr>`).join('')+`</table>`:''}
+    ${m.facts&&m.facts.length?`<div class="m-sec">숫자를 눌러 계산 내역 보기</div>`+
+      m.facts.map((f,i)=>`<button class="drill" data-i="${i}"><span>${f.l}</span><span class="dv">${f.v}</span></button>`).join(''):''}
+    <div class="m-sec">실제 응답 확인</div>
+    <button class="drill big" data-act="list"><span>${m.list.label} 전체 보기 (${m.list.count.toLocaleString()}건)</span></button>
+    <button class="drill" data-act="comp"><span>응답자 구성별 비교 — ${m.list.kind==='score'?'평균 점수':'의견 성격'} 표</span></button>
+    ${m.tech?`<details class="tech"><summary>감사용 기술 정보</summary>${m.tech.map(t=>
+      `<div class="kv"><span>${t[0]}</span><span>${t[1]}</span></div>`).join('')}</details>`:''}`;
+  document.querySelectorAll('#m-left .drill[data-i]').forEach(el=>el.addEventListener('click',()=>{
+    document.querySelectorAll('#m-left .drill').forEach(x=>x.classList.remove('on'));
+    el.classList.add('on');rpDetail(m.facts[+el.dataset.i].d)}));
+  document.querySelector('#m-left .drill[data-act="list"]').addEventListener('click',e=>{
+    document.querySelectorAll('#m-left .drill').forEach(x=>x.classList.remove('on'));
+    e.currentTarget.classList.add('on');rpList()});
+  document.querySelector('#m-left .drill[data-act="comp"]').addEventListener('click',e=>{
+    document.querySelectorAll('#m-left .drill').forEach(x=>x.classList.remove('on'));
+    e.currentTarget.classList.add('on');rpCompare()});
+  rpPad(`<div class="rp-empty">${m.facts&&m.facts.length?'왼쪽에서 <b>숫자</b>를 클릭하면 어떻게 계산했는지, ':''}
+    <b>응답 전체 보기</b>를 누르면 실제 응답 ${m.list.count.toLocaleString()}건이,
+    <b>응답자 구성별 비교</b>를 누르면 직급·연령대·근속별 비교 표가 여기에 표시됩니다.</div>`);
+  CUR=m;cap('m-left').scrollTop=0;
+  modal.classList.add('on');scrim.classList.add('on');document.body.classList.add('lock');modal.focus();
+}
+
+function openEv(key,anchor){
+  const e=EV[key];lastFocus=anchor||null;
+  renderLeft({eyebrow:'이 문장의 근거',title:'“'+e.claim+'”',cards:e.cards,how:e.how,rule:e.rule,
+    ruleItems:e.ruleItems,checks:e.checks,conf:e.conf,facts:e.facts,list:e.list,tech:e.tech});
+}
+
+function openQ5(no){
+  const q=Q5.find(x=>x.no===no),A=AREAS.find(a=>a.k===q.area);
+  const roleAvg=[['임원',52,+(q.real+0.24).toFixed(2)],['팀장',96,+(q.real+0.11).toFixed(2)],
+                 ['팀원',714,+(q.real-0.03).toFixed(2)]];
+  renderLeft({
+    eyebrow:`객관식 ${no}_문항 · ${q.area}`,
+    title:'“'+q.t+'”',
+    cards:[['올해 평균',q.real.toFixed(2)+'<small>/5</small>'],
+           ['작년 대비',(q.d>0?'+':'')+q.d.toFixed(2)+'<small>점</small>'],
+           ['응답','862<small>명</small>']],
+    how:[`이 문항은 <b>${q.area}</b> 영역에 속합니다. 이 영역 ${A.q}개 문항의 평균은 <b>${A.avg.toFixed(2)}점</b>입니다.`,
+      `862명 전원이 1~5점 중 하나를 선택했습니다. 평균은 <b>${q.real.toFixed(2)}점</b>입니다.`,
+      `긍정(4~5점) <b>${q.pos}%</b>, 보통 ${q.mid}%, 부정(1~2점) <b>${q.neg}%</b>입니다.`,
+      `작년 ${q.prev.toFixed(2)}점에서 <b>${(q.d>0?'+':'')+q.d.toFixed(2)}점</b> 변했습니다.`],
+    info:[...[5,4,3,2,1].map(s=>[`${s}점 ${['전혀 그렇지 않다','그렇지 않다','보통이다','그렇다','매우 그렇다'][s-1]}`,
+      q.c[s-1].toLocaleString()+'명',Math.round(q.c[s-1]/N*100)+'%']),
+      ['— 긍정 (4~5점)',(q.c[3]+q.c[4]).toLocaleString()+'명',q.pos+'%'],
+      ['— 부정 (1~2점)',(q.c[0]+q.c[1]).toLocaleString()+'명',q.neg+'%']],
+    infoTitle:'몇 점을 줬나',
+    facts:[
+      {l:'점수 분포',v:q.real.toFixed(2)+'점',d:{t:'“'+q.t+'”',big:q.real.toFixed(2),
+        unit:'/ 5점 · 작년 '+q.prev.toFixed(2),cond:'응답자 862명 전원이 답했습니다.',
+        dist:[5,4,3,2,1].map(s=>[`${s}점`,q.c[s-1],Math.round(q.c[s-1]/N*100)]),distTitle:'몇 점을 줬나 (명)',
+        rerun:'2026-08-11 10:22 다시 계산 · 같은 값 확인'}},
+      {l:'역할별 평균',v:'3구간',d:{t:'역할별 평균 점수',big:q.real.toFixed(2),unit:'/ 5점 · 전체 평균',
+        cond:'인원이 5명 미만인 구간은 표시하지 않습니다.',
+        rows:roleAvg.map(r=>[r[0],r[2].toFixed(2),r[1]+'명']),
+        note:'역할별 차이가 0.3점을 넘으면 별도 신호로 검토합니다.',
+        rerun:'2026-08-11 10:22 다시 계산 · 같은 값 확인'}},
+      {l:'영역 평균에 미친 영향',v:A.avg.toFixed(2)+'점',d:{t:q.area+' 영역 문항별 점수',
+        big:A.avg.toFixed(2),unit:`/ 5점 · ${A.q}문항 평균`,cond:'이 영역에 속한 문항 전체입니다.',
+        rows:Q5.filter(x=>x.area===q.area).sort((a,b)=>a.no-b.no)
+          .map(x=>[(x.no===no?'▶ ':'')+(x.t.length>26?x.t.slice(0,26)+'…':x.t),x.real.toFixed(2),
+                   (x.d>0?'+':'')+x.d.toFixed(2)]),
+        rerun:'2026-08-11 10:22 다시 계산 · 같은 값 확인'}}],
+    list:{count:N,kind:'score',q,label:'이 문항의 응답',
+      sub:'862명이 각각 몇 점을 골랐는지 전부 표시합니다. 글로 쓴 응답은 없습니다.',
+      note:'누가 몇 점을 줬는지는 저장하지 않습니다. 역할 구분은 통계 목적이며, 인원 5명 미만 구간은 표시하지 않습니다.'},
+    tech:[['question',no+'_문항'],['area',q.area],['n','862'],
+      ['mean',q.real.toFixed(4)],['prev',q.prev.toFixed(2)],['fingerprint','q'+no+'-a91f…']]});
+}
+
+function openQT(no){
+  const q=QT.find(x=>x.no===no),tot=q.themes.reduce((a,t)=>a+t[1],0);
+  renderLeft({
+    eyebrow:`주관식 ${no}_문항${q.req?' · 필수 응답':''}`,
+    title:'“'+q.t+'”',
+    cards:[['응답 수',q.resp.toLocaleString()+'<small>건</small>'],
+           ['응답률',(q.resp/N*100).toFixed(1)+'<small>%</small>'],
+           ['부정 의견',q.s[0]+'<small>%</small>']],
+    how:[`이 문항에는 <b>${q.resp.toLocaleString()}건</b>의 응답이 달렸습니다(응답자 862명 중 ${(q.resp/N*100).toFixed(1)}%).`,
+      `응답을 의미 단위로 나눈 뒤 비슷한 내용끼리 묶어 주제를 뽑았습니다.`,
+      `가장 많이 나온 주제는 <b>${q.themes[0][0]}</b>(${q.themes[0][1]}건)입니다.`,
+      `의견 성격은 부정 ${q.s[0]}% · 보통 ${q.s[1]}% · 긍정 ${q.s[2]}%입니다.`],
+    info:[...q.themes.map(t=>[t[0],t[1]+'건',Math.round(t[1]/q.resp*100)+'%']),
+      ['그 외 주제',(q.resp-tot)+'건',Math.round((q.resp-tot)/q.resp*100)+'%']],
+    infoTitle:'이 문항에서 나온 주제',
+    facts:[
+      {l:'주제별 언급 건수',v:q.themes.length+'개',d:{t:'이 문항에서 나온 주제',
+        big:q.themes[0][1],unit:'건 · '+q.themes[0][0],cond:'한 응답이 여러 주제에 걸칠 수 있습니다.',
+        dist:q.themes.map(t=>[t[0],t[1],Math.round(t[1]/q.resp*100)]),distTitle:'주제별 건수',
+        rerun:'2026-08-11 10:24 다시 계산 · 같은 값 확인'}},
+      {l:'의견 성격',v:q.s[0]+'% 부정',d:{t:'의견의 성격',big:q.s[0],unit:'% 부정적',
+        cond:'응답을 긍정·보통·부정으로 자동 분류했습니다.',
+        dist:[['긍정',Math.round(q.resp*q.s[2]/100),q.s[2]],['보통',Math.round(q.resp*q.s[1]/100),q.s[1]],
+              ['부정',Math.round(q.resp*q.s[0]/100),q.s[0]]],distTitle:'성격별 건수',
+        rerun:'2026-08-11 10:24 다시 계산 · 같은 값 확인'}}],
+    list:{count:q.resp,pool:q.pool,label:'이 문항의 응답',qlabel:null,
+      sub:'이 문항에 달린 응답 전부입니다. 노란 부분이 주제로 분류된 대목입니다.',
+      note:'인원이 5명 미만인 팀의 응답은 개인이 드러날 수 있어 목록에서 제외했습니다. 이름·직책 등은 저장 시점에 지워집니다.'},
+    tech:[['question',no+'_문항'],['responses',q.resp],['segments',Math.round(q.resp*2.06)],
+      ['themes',q.themes.length+' (상위)'],['fingerprint','q'+no+'-7b04…']]});
+}
+
+function closeEv(){modal.classList.remove('on');scrim.classList.remove('on');
+  document.body.classList.remove('lock');lastFocus?.focus?.()}
+
+document.querySelectorAll('.cl,.iss').forEach(el=>{
+  if(!el.matches('button')){el.setAttribute('tabindex','0');el.setAttribute('role','button')}
+  const go=()=>{el.classList.add('seen');openEv(el.dataset.ev,el)};
+  el.addEventListener('click',go);
+  el.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&!el.matches('button')){e.preventDefault();go()}})});
+document.querySelectorAll('tr.qrow').forEach(tr=>{
+  tr.setAttribute('tabindex','0');tr.dataset.bound='1';
+  const go=()=>{lastFocus=tr;tr.dataset.q5?openQ5(+tr.dataset.q5):openQT(+tr.dataset.qt)};
+  tr.addEventListener('click',go);
+  tr.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();go()}})});
+/* 혹시 나중에 추가되는 행이 있어도 클릭이 동작하도록 (중복 방지: bound 표시) */
+document.addEventListener('click',e=>{
+  const tr=e.target.closest('tr.qrow');
+  if(!tr||tr.dataset.bound)return;
+  lastFocus=tr;
+  if(tr.dataset.q5)openQ5(+tr.dataset.q5);else if(tr.dataset.qt)openQT(+tr.dataset.qt);
+});
+cap('m-close').addEventListener('click',closeEv);
+scrim.addEventListener('click',closeEv);
+addEventListener('keydown',e=>{if(e.key==='Escape'&&modal.classList.contains('on'))closeEv()});
+</script>
+</body>
+</html>
